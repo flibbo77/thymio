@@ -1,0 +1,5 @@
+Manifest-Version: 1.0
+Class-Path: /usr/share/java/unix.jar /usr/share/java/hexdump.jar /usr/
+ share/java/debug-disable.jar
+Created-By: 1.7.0_65 (Oracle Corporation)
+
