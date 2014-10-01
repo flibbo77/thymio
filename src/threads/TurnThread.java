@@ -3,15 +3,15 @@ package threads;
 import helpers.Vars;
 import thymio.Thymio;
 
-public class NinetyTurn extends Thread {
+public class TurnThread extends Thread {
 
 	int degr;
 	short speed;
 	Thymio thy;
 
-	public NinetyTurn(int degrees, short speed, Thymio myThymio) {
+	public TurnThread(int degrees, Thymio myThymio) {
 		degr = degrees;
-		this.speed = speed;
+		this.speed = Vars.TURN_SPEED;
 		thy = myThymio;
 	}
 

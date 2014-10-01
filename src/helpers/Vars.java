@@ -27,6 +27,7 @@ public class Vars {
 												// mit Dikstra jede nötige
 												// Rotation mit einem Malus
 												// versieht
+	public static final short TURN_SPEED = 41;
 
 	public static String toString(int var) {
 		switch (var) {

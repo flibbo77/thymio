@@ -14,7 +14,7 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.BoxLayout;
 
-import threads.NinetyTurn;
+import threads.TurnThread;
 import thymio.Thymio;
 
 public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
@@ -171,7 +171,7 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		case KeyEvent.VK_9:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
-				thread = new NinetyTurn(90,(short) 40, myThymio);
+				thread = new TurnThread(90, myThymio);
 				thread.start();
 			} 
 
