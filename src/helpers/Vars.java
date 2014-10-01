@@ -28,6 +28,8 @@ public class Vars {
 												// Rotation mit einem Malus
 												// versieht
 	public static final short TURN_SPEED = 41;
+	public static final short DRIVE_SPEED = 41;
+	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 1000;
 
 	public static String toString(int var) {
 		switch (var) {

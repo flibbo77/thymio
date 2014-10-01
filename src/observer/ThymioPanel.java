@@ -125,6 +125,7 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			// TODO Auto-generated catch block
 			// e.printStackTrace();
 			// }
+			
 			myThymio.updatePose(System.currentTimeMillis());
 		}
 	}

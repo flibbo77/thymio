@@ -60,7 +60,7 @@ public class Thymio {
 			logData.println("motor.left.speed\tmotor.right.speed\tdelta x observed\tdelta x computed\tdelta theta observed\tdelta theta computed\tthetaSum\tpos X\tposY\tvertical 0\tvertical 1");
 			logData.flush();
 		} catch (IOException e) {
-			// TODO Auto-generated catch block
+			
 			e.printStackTrace();
 		}
 	}
@@ -97,15 +97,7 @@ public class Thymio {
 
 		List<Short> sensorData;
 		if (lastTimeStamp > Long.MIN_VALUE) {
-			/*
-			 * if (rotate) { System.out.println("timeCounter: " + timeCounter);
-			 * if (timeCounter < calcTurnTime) {
-			 * myInterface.myPanel.rotate(turnSpeed); timeCounter =
-			 * (lastTimeStamp - startTimeStamp) / 1000; } else { rotate = false;
-			 * myInterface.myPanel.rotate(0); } }
-			 */
-			//System.out.println("thread, in dem updatePose läuft: "
-					//+ Thread.currentThread().getName());
+			
 			long dt = now - lastTimeStamp;
 			double secsElapsed = ((double) dt) / 1000.0;
 			//System.out.println("time: " + secsElapsed);
@@ -196,5 +188,12 @@ public class Thymio {
 		timeCounter = 0;
 		calcTurnTime = (long) degrees / (long) turnSpeed;
 		System.out.println("calcTurnTime: " + calcTurnTime);
+	}
+
+	public void driveStraight(short driveSpeed) {
+		setVRight((short)(driveSpeed/2));
+		setVLeft((short)(driveSpeed/2));
+		setVLeft(driveSpeed);
+		setVRight(driveSpeed);		
 	}
 }
