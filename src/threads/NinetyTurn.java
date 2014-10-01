@@ -1,5 +1,6 @@
 package threads;
 
+import helpers.Vars;
 import thymio.Thymio;
 
 public class NinetyTurn extends Thread {
@@ -15,7 +16,8 @@ public class NinetyTurn extends Thread {
 	}
 
 	public void run() {
-		thy.rotate = true;
+		//thy.rotate = true;
+		Vars.rotate = true;
 		double orientation = thy.myPanel.myMap.getThymioOrientation();
 		thy.isDriving = true;
 		if (degr < 0)
@@ -56,6 +58,7 @@ public class NinetyTurn extends Thread {
 			thy.isDriving = false;
 			thy.rotate = false;
 			thy.updatePose(System.currentTimeMillis());
+			Vars.rotate = false;
 			
 		}
 	}

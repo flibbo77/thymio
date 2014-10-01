@@ -20,6 +20,8 @@ public class Vars {
 	public static final double THYMIO_SPEED_COEF = 3.75;
 	public static final double THYMIO_BASEWIDTH = 95;
 	public static final short MOTOR_CORR = 7;
+	
+	public static boolean rotate = false;
 
 	public static final double ROT_MALUS = 3; // Wert, der in der Routenplanung
 												// mit Dikstra jede nötige

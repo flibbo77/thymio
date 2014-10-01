@@ -1,5 +1,7 @@
 package thymio;
 
+import helpers.Vars;
+
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.PrintStream;
@@ -115,6 +117,7 @@ public class Thymio {
 			double odomForward;
 			double odomRotation;
 			short motorCorrection = 0;
+			if(!Vars.rotate) motorCorrection = Vars.MOTOR_CORR;
 
 			sensorData = myClient.getVariable("motor.left.speed");
 			if (sensorData != null){
@@ -125,7 +128,7 @@ public class Thymio {
 				System.out.println("no data for motor.left.speed");
 			sensorData = myClient.getVariable("motor.right.speed");
 			if (sensorData != null){
-				odomRight = (short) ((short)sensorData.get(0) - 0);
+				odomRight = (short) ((short)sensorData.get(0) - motorCorrection);
 				rightMotorSpeed = odomRight;
 			}
 			else

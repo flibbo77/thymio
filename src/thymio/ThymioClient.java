@@ -1,5 +1,7 @@
 package thymio;
 
+import helpers.Vars;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -45,7 +47,7 @@ public class ThymioClient {
 	private void connect() throws IOException {
 		long connectStartTime = System.currentTimeMillis();
 
-		conn = new Socket("192.168.178.64", 6789);
+		conn = new Socket("192.168.43.64", 6789);
 		//System.out.println("Time for new Socket:  " + (System.currentTimeMillis() - connectStartTime));
 		printWriter =
 				new PrintWriter(
@@ -61,9 +63,9 @@ public class ThymioClient {
 	}
 	
 	public void setVariable(String variable, List<Short> data) {		
-		if(variable.equals("motor.right.target") && data.get(0) > 50){
+		if(!Vars.rotate && variable.equals("motor.right.target") && data.get(0) > 50){
 			short temp = data.get(0);
-			temp += 6;
+			temp += Vars.MOTOR_CORR;
 			data.set(0,temp);
 		}
 		try {
