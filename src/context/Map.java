@@ -229,22 +229,22 @@ public class Map {
 		if (el.getPosX() > 0) {
 			link = element[el.getPosX() - 1][el.getPosY()];
 			if (!link.isOccupied())
-				el.addEdge(link, 1, Vars.SOUTH_NORTH);
+				el.addEdge(link, 1, Vars._270_DEGREES);
 		}
 		if (el.getPosY() > 0) {
 			link = element[el.getPosX()][el.getPosY() - 1];
 			if (!link.isOccupied())
-				el.addEdge(link, 1, Vars.EAST_WEST);
+				el.addEdge(link, 1, Vars._180_DEGREES);
 		}
 		if (el.getPosX() < element.length - 1) {
 			link = element[el.getPosX() + 1][el.getPosY()];
 			if (!link.isOccupied())
-				el.addEdge(link, 1, Vars.NORTH_SOUTH);
+				el.addEdge(link, 1, Vars._90_DEGREES);
 		}
 		if (el.getPosY() < element[0].length - 1) {
 			link = element[el.getPosX()][el.getPosY() + 1];
 			if (!link.isOccupied())
-				el.addEdge(link, 1, Vars.WEST_EAST);
+				el.addEdge(link, 1, Vars._0_DEGREES);
 		}
 		if (Vars.USE_DIAGONALS) {
 			// create diagonal links

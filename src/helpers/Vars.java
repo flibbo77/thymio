@@ -1,10 +1,10 @@
 package helpers;
 
 public class Vars {
-	public static final int NORTH_SOUTH = 0;
-	public static final int SOUTH_NORTH = 1;
-	public static final int WEST_EAST = 2;
-	public static final int EAST_WEST = 3;
+	public static final int _90_DEGREES = 0;
+	public static final int _270_DEGREES = 1;
+	public static final int _180_DEGREES = 2;
+	public static final int _0_DEGREES = 3;
 
 	public static final int NWEST_SEAST = 4;
 	public static final int SEAST_NWEST = 5;
@@ -15,7 +15,7 @@ public class Vars {
 	public static final int MAP_Y = 20;
 	public static final double MAPFIELD_SIZE = 17;
 	public static final int NUM_BARRIERS = 10;
-	public static final boolean USE_DIAGONALS = true;
+	public static final boolean USE_DIAGONALS = false;
 
 	public static final double THYMIO_SPEED_COEF = 3.75;
 	public static final double THYMIO_BASEWIDTH = 95;
@@ -33,14 +33,14 @@ public class Vars {
 
 	public static String toString(int var) {
 		switch (var) {
-		case 0:
-			return "north-south";
-		case 1:
-			return "south-north";
-		case 2:
-			return "west-east";
-		case 3:
-			return "east-west";
+		case _90_DEGREES:
+			return "90 Grad";
+		case _270_DEGREES:
+			return "270 Grad";
+		case _180_DEGREES:
+			return "180 Gradt";
+		case _0_DEGREES:
+			return "0 Grad";
 		case 4:
 			return "nwest-seast";
 		case 5:

@@ -27,6 +27,7 @@ public class Dikstra {
 		goal = to;
 
 		start.distance = 0;
+		
 		dijkstra();
 		System.out.println("goal: " + goal.getPosX() + "\t" + goal.getPosY());
 		System.out.println("Gesamtstrecke: " + goal.distance);
