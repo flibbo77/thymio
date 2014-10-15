@@ -21,7 +21,17 @@ public class Vars {
 	public static final double THYMIO_BASEWIDTH = 95;
 	public static final short MOTOR_CORR = 7;
 	
+	public static final int BLACK_FIELD = 0;
+	public static final int WHITE_FIELD = 1;
+	
+	public static final int POSITION_OK = 0;
+	public static final int TO_FAR_RIGHT = 1;
+	public static final int TO_FAR_LEFT = 2;
+	
+	public static final int START_FIELD_COLOR = BLACK_FIELD;
+	
 	public static boolean rotate = false;
+	
 
 	public static final double ROT_MALUS = 3; // Wert, der in der Routenplanung
 												// mit Dikstra jede nötige

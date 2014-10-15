@@ -27,8 +27,9 @@ public class Thymio {
 	private double theta = 0;
 	private short rightMotorSpeed;
 	private short leftMotorSpeed;
-	
-	
+	private int actualField;
+	private int inFieldPosition;
+
 	public boolean isDriving = false;
 	public boolean rotate = false;
 	private int degrees = 0;
@@ -50,7 +51,8 @@ public class Thymio {
 		myControlThread.setName("DrivingThread");
 		myControlThread.start();
 		lastTimeStamp = Long.MIN_VALUE;
-		
+		actualField = Vars.START_FIELD_COLOR;
+		inFieldPosition = Vars.POSITION_OK;
 
 		setVLeft((short) 0);
 		setVRight((short) 0);
@@ -60,7 +62,7 @@ public class Thymio {
 			logData.println("motor.left.speed\tmotor.right.speed\tdelta x observed\tdelta x computed\tdelta theta observed\tdelta theta computed\tthetaSum\tpos X\tposY\tvertical 0\tvertical 1");
 			logData.flush();
 		} catch (IOException e) {
-			
+
 			e.printStackTrace();
 		}
 	}
@@ -97,10 +99,10 @@ public class Thymio {
 
 		List<Short> sensorData;
 		if (lastTimeStamp > Long.MIN_VALUE) {
-			
+
 			long dt = now - lastTimeStamp;
 			double secsElapsed = ((double) dt) / 1000.0;
-			//System.out.println("time: " + secsElapsed);
+			// System.out.println("time: " + secsElapsed);
 			double distForward; // distance passed in secsElpased in forward
 								// direction of the robot
 			double distRotation; // angle covered in secsElapsed around Thymio's
@@ -109,24 +111,31 @@ public class Thymio {
 			double odomForward;
 			double odomRotation;
 			short motorCorrection = 0;
-			if(!Vars.rotate) motorCorrection = Vars.MOTOR_CORR;
+
+			int proxGroundLeft;
+			int proxGroundRight;
+			if (!Vars.rotate)
+				motorCorrection = Vars.MOTOR_CORR;
 
 			sensorData = myClient.getVariable("motor.left.speed");
-			if (sensorData != null){
+			if (sensorData != null) {
 				odomLeft = sensorData.get(0);
 				leftMotorSpeed = odomLeft;
-			}
-			else
+			} else
 				System.out.println("no data for motor.left.speed");
 			sensorData = myClient.getVariable("motor.right.speed");
-			if (sensorData != null){
-				odomRight = (short) ((short)sensorData.get(0) - motorCorrection);
+			if (sensorData != null) {
+				odomRight = (short) ((short) sensorData.get(0) - motorCorrection);
 				rightMotorSpeed = odomRight;
-			}
-			else
+			} else
 				System.out.println("no data for motor.right.speed");
 
 			sensorData = myClient.getVariable("prox.ground.delta");
+			proxGroundLeft = sensorData.get(0);
+			proxGroundRight = sensorData.get(1);
+
+			checkInFieldPosition(proxGroundLeft, proxGroundRight);
+			checkActualFieldColor(proxGroundLeft, proxGroundRight);
 
 			if (odomLeft == Short.MIN_VALUE || odomRight == Short.MIN_VALUE)
 				return;
@@ -168,20 +177,44 @@ public class Thymio {
 		}
 		lastTimeStamp = now;
 
-		//notify();
+		// notify();
+	}
+
+	private void checkActualFieldColor(int proxGroundLeft, int proxGroundRight) {
+		if (proxGroundLeft > 550 && proxGroundRight > 550)
+			actualField = Vars.WHITE_FIELD;
+		else if (proxGroundLeft < 550 && proxGroundRight < 550)
+			actualField = Vars.BLACK_FIELD;
+	}
+
+	private void checkInFieldPosition(int proxGroundLeft, int proxGroundRight) {
+		if (actualField == Vars.WHITE_FIELD && proxGroundLeft > 550
+				&& proxGroundRight < 550)
+			inFieldPosition = Vars.TO_FAR_RIGHT;
+		else if (actualField == Vars.BLACK_FIELD && proxGroundLeft < 550
+				&& proxGroundRight < 550)
+			inFieldPosition = Vars.TO_FAR_LEFT;
+	}
+	
+	public int getActualField() {
+		return actualField;
+	}
+
+	public int getInFieldPosition() {
+		return inFieldPosition;
 	}
 
 	public void stopMove() {
-		setVLeft((short)(leftMotorSpeed/2));
-		setVRight((short)(rightMotorSpeed/2));
+		setVLeft((short) (leftMotorSpeed / 2));
+		setVRight((short) (rightMotorSpeed / 2));
 		setVRight((short) 0);
 		setVLeft((short) 0);
 	}
 
 	public void driveStraight(short driveSpeed) {
-		setVRight((short)(driveSpeed/2));
-		setVLeft((short)(driveSpeed/2));
+		setVRight((short) (driveSpeed / 2));
+		setVLeft((short) (driveSpeed / 2));
 		setVLeft(driveSpeed);
-		setVRight(driveSpeed);		
+		setVRight(driveSpeed);
 	}
 }
