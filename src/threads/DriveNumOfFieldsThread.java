@@ -32,5 +32,6 @@ public class DriveNumOfFieldsThread extends Thread {
 
 	private void updateFieldCount() {
 		// TODO Auto-generated method stub
+		thy.getActualField();
 	}
 }
