@@ -14,8 +14,10 @@ import javax.swing.event.ChangeEvent;
 import javax.swing.event.ChangeListener;
 import javax.swing.BoxLayout;
 
+import threads.DriveNumOfFieldsThread;
 import threads.TurnThread;
 import thymio.Thymio;
+import thymio.ThymioDrivingThread;
 
 public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		ActionListener {
@@ -177,6 +179,10 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			} 
 
 			break;
+			
+		case KeyEvent.VK_Z:
+			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(1,myThymio);
+			myDriver.start();
 
 		default:
 			break;

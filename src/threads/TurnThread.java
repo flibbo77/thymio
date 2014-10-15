@@ -56,7 +56,7 @@ public class TurnThread extends Thread {
 			thy.setVLeft((short) 0);
 			thy.setVRight((short) 0);
 			thy.isDriving = false;
-			thy.rotate = false;
+//			thy.rotate = false;
 			thy.updatePose(System.currentTimeMillis());
 			Vars.rotate = false;
 			

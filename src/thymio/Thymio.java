@@ -185,6 +185,7 @@ public class Thymio {
 			actualField = Vars.WHITE_FIELD;
 		else if (proxGroundLeft < 550 && proxGroundRight < 550)
 			actualField = Vars.BLACK_FIELD;
+		System.out.println("Farbe des Feldes: " + actualField);
 	}
 
 	private void checkInFieldPosition(int proxGroundLeft, int proxGroundRight) {
@@ -195,7 +196,7 @@ public class Thymio {
 				&& proxGroundRight < 550)
 			inFieldPosition = Vars.TO_FAR_LEFT;
 	}
-	
+
 	public int getActualField() {
 		return actualField;
 	}
