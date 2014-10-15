@@ -203,10 +203,6 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		}
 	}
 
-	private void startRotation(int degrees) {
-		myThymio.rotateDegrees(degrees, 20);
-	}
-
 	public void rotate(int speed) {
 		System.out.println("rotate " + speed);
 		theta.setValue(theta.getValue() + speed);

@@ -176,18 +176,6 @@ public class Thymio {
 		setVRight((short)(rightMotorSpeed/2));
 		setVRight((short) 0);
 		setVLeft((short) 0);
-
-
-	}
-
-	public void rotateDegrees(int deg, int speed) {
-		turnSpeed = speed;
-		degrees = deg;
-		rotate = true;
-		startTimeStamp = lastTimeStamp;
-		timeCounter = 0;
-		calcTurnTime = (long) degrees / (long) turnSpeed;
-		System.out.println("calcTurnTime: " + calcTurnTime);
 	}
 
 	public void driveStraight(short driveSpeed) {
