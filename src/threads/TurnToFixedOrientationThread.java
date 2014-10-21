@@ -18,51 +18,60 @@ public class TurnToFixedOrientationThread extends Thread {
 	public void run() {
 		// thy.rotate = true;
 		Vars.rotate = true;
-		double orientationAtStart = thy.myPanel.myMap.getThymioOrientation();
-
+		
 		thy.isDriving = true;
-		if (desiredOrientation < 0)
-			speed *= -1;
+		thy.updatePose(System.currentTimeMillis());
+		thy.setVRight(speed);
+		thy.setVLeft((short) -speed);
+		thy.updatePose(System.currentTimeMillis());
 
-		thy.setVLeft(speed);
-		thy.setVRight((short) -speed);
-		double actualOrientation = thy.myPanel.myMap.getThymioOrientation();
-		while (Math.abs(Math.toDegrees(orientationAtStart - actualOrientation)) < Math
-				.abs(desiredOrientation)) {
+		double actualOrientation = calcThymioOrientation();
+		while (Math.toDegrees(actualOrientation) < desiredOrientation) {
 
 			System.out.println("Rotation_state: "
-					+ Math.toDegrees(orientationAtStart - actualOrientation));
+					+ Math.toDegrees(actualOrientation));
 			thy.updatePose(System.currentTimeMillis());
-			actualOrientation = thy.myPanel.myMap.getThymioOrientation();
+			actualOrientation = calcThymioOrientation();
 		}
+
 		thy.setVLeft((short) 0);
 		thy.setVRight((short) 0);
 		thy.isDriving = false;
-		thy.updatePose(System.currentTimeMillis());
-		actualOrientation = thy.myPanel.myMap.getThymioOrientation();
 
-		doCorrectionIfNecessary(orientationAtStart, actualOrientation);
+		thy.updatePose(System.currentTimeMillis());
+		actualOrientation = calcThymioOrientation();
+
+		doCorrectionIfNecessary(actualOrientation);
 	}
 
-	private void doCorrectionIfNecessary(double orientationAtStart,
-			double actualOrientation) {
-		if (Math.toDegrees(orientationAtStart - actualOrientation)
-				- desiredOrientation > 2) {
+	private double calcThymioOrientation() {
+		double actOrientation = thy.myPanel.myMap.getThymioOrientation();
+		actOrientation %= 2 * Math.PI;
+		if (actOrientation < 0)
+			actOrientation = 2 * Math.PI + actOrientation;
+		return actOrientation;
+	}
+
+	private void doCorrectionIfNecessary(double actualOrientation) {
+		//double temp = Math.toDegrees(desiredOrientation);
+		System.out.println("Fehler: " + (Math.toDegrees(actualOrientation) - desiredOrientation));
+		if (Math.toDegrees(actualOrientation) - desiredOrientation > 2) {
+			
 			thy.isDriving = true;
-			speed = (short) -speed;
+			speed = (short) -Vars.CORRECTION_SPEED;
 			System.out.println("Rotation_state: "
-					+ Math.toDegrees(orientationAtStart - actualOrientation));
-			thy.setVLeft((short) (speed / 5));
-			thy.setVRight((short) (-speed / 5));
+					+ Math.toDegrees(actualOrientation));
 			thy.updatePose(System.currentTimeMillis());
-			actualOrientation = thy.myPanel.myMap.getThymioOrientation();
-			while (Math.toDegrees(orientationAtStart - actualOrientation) > desiredOrientation) {
+			thy.setVRight((short) (speed ));
+			thy.setVLeft((short) (-speed ));
+			thy.updatePose(System.currentTimeMillis());
+			actualOrientation = calcThymioOrientation();
+			while (Math.toDegrees(actualOrientation) > desiredOrientation) {
 				System.out
 						.println("Rotation_state: "
-								+ Math.toDegrees(orientationAtStart
-										- actualOrientation));
+								+ Math.toDegrees(actualOrientation));
 				thy.updatePose(System.currentTimeMillis());
-				actualOrientation = thy.myPanel.myMap.getThymioOrientation();
+				actualOrientation = calcThymioOrientation();
 			}
 			thy.setVLeft((short) 0);
 			thy.setVRight((short) 0);

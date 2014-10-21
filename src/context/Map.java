@@ -46,7 +46,7 @@ public class Map {
 
 		initMap();
 		initFilter();
-		calculatePath(element[thymioX][thymioY], element[sizeX - 1][sizeY - 1]);
+		Path path = calculatePath(element[thymioX][thymioY], element[sizeX - 1][sizeY - 1]);
 		printMap();
 	}
 

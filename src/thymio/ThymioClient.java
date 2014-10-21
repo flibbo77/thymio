@@ -38,7 +38,7 @@ public class ThymioClient {
 		//	message +=c;
 		//}
 		message = bufferedReader.readLine();
-		//System.out.println("Time for read:  " + (System.currentTimeMillis() - connectStartTime));
+		System.out.println("Time for read:  " + (System.currentTimeMillis() - connectStartTime));
 		//System.out.println(message);
 		
 		return message;

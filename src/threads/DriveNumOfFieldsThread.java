@@ -8,6 +8,8 @@ public class DriveNumOfFieldsThread extends Thread {
 	private int fieldCount;
 	private Thymio thy;
 	
+	private int previousFieldNum = -1;
+	
 
 	public DriveNumOfFieldsThread(int numOfFields, Thymio thy) {
 		this.numOfFields = numOfFields;
@@ -18,8 +20,10 @@ public class DriveNumOfFieldsThread extends Thread {
 		fieldCount = 0;
 		thy.driveStraight(Vars.DRIVE_SPEED);
 		while(fieldCount <= numOfFields){
+			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
 			updateFieldCount();
+			System.out.println("Time for DriveLoop: " +(System.currentTimeMillis() - startLoop));
 		}
 		try {
 			Thread.sleep(Vars.GET_TO_CENTER_OF_MAP_ELEMENT_DELAY);
@@ -31,7 +35,12 @@ public class DriveNumOfFieldsThread extends Thread {
 	}
 
 	private void updateFieldCount() {
-		// TODO Auto-generated method stub
-		thy.getActualField();
+		int currentField = thy.getActualField();
+		
+		if (currentField != previousFieldNum) {
+			++fieldCount;
+		}
+		
+		previousFieldNum = currentField;
 	}
 }

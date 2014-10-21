@@ -16,6 +16,7 @@ import javax.swing.BoxLayout;
 
 import threads.DriveNumOfFieldsThread;
 import threads.TurnThread;
+import threads.TurnToFixedOrientationThread;
 import thymio.Thymio;
 import thymio.ThymioDrivingThread;
 
@@ -171,14 +172,43 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 
 			break;
 
-		case KeyEvent.VK_9:
+		case KeyEvent.VK_1:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
-				thread = new TurnThread(90, myThymio);
+				thread = new TurnToFixedOrientationThread(0, myThymio);
 				thread.start();
 			} 
 
 			break;
+		
+		case KeyEvent.VK_2:
+			System.out.println(thread);
+			if (thread == null || !thread.isAlive()) {
+				thread = new TurnToFixedOrientationThread(90, myThymio);
+				thread.start();
+			} 
+
+			break;
+			
+		case KeyEvent.VK_3:
+			System.out.println(thread);
+			if (thread == null || !thread.isAlive()) {
+				thread = new TurnToFixedOrientationThread(180, myThymio);
+				thread.start();
+			} 
+
+			break;
+		
+		case KeyEvent.VK_4:
+			System.out.println(thread);
+			if (thread == null || !thread.isAlive()) {
+				thread = new TurnToFixedOrientationThread(270, myThymio);
+				thread.start();
+			} 
+
+			break;
+		
+		
 			
 		case KeyEvent.VK_Z:
 			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(1,myThymio);

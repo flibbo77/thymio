@@ -19,7 +19,7 @@ public class Vars {
 
 	public static final double THYMIO_SPEED_COEF = 3.75;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR = 7;
+	public static final short MOTOR_CORR = 5;
 	
 	public static final int BLACK_FIELD = 0;
 	public static final int WHITE_FIELD = 1;
@@ -37,9 +37,10 @@ public class Vars {
 												// mit Dikstra jede nötige
 												// Rotation mit einem Malus
 												// versieht
-	public static final short TURN_SPEED = 41;
-	public static final short DRIVE_SPEED = 41;
-	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 1000;
+	public static final short TURN_SPEED = 49;
+	public static final short CORRECTION_SPEED = 7;
+	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
+	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2000;
 
 	public static String toString(int var) {
 		switch (var) {
