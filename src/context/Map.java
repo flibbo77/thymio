@@ -36,6 +36,8 @@ public class Map {
 	//public static final boolean USE_DIAGONALS = true;
 
 	private KalmanFilter posEstimate;
+	
+	private Path calculatedPath;
 
 	public Map(int x, int y, double l) {
 		edgelength = l;
@@ -46,10 +48,14 @@ public class Map {
 
 		initMap();
 		initFilter();
-		Path path = calculatePath(element[thymioX][thymioY], element[sizeX - 1][sizeY - 1]);
+		calculatedPath = calculatePath(element[thymioX][thymioY], element[sizeX - 1][sizeY - 1]);
 		printMap();
 	}
 
+	public Path getCalculatedPath() {
+		return calculatedPath;
+	}
+	
 	private void initFilter() {
 		DenseMatrix64F F;
 		DenseMatrix64F Q;

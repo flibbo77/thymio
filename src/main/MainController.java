@@ -13,6 +13,7 @@ import context.Map;
 import context.Path;
 import observer.MapPanel;
 import observer.ThymioInterface;
+import thymio.PathDriveController;
 import thymio.Thymio;
 
 public class MainController extends JFrame {
@@ -31,6 +32,8 @@ public class MainController extends JFrame {
 		
 		myMap = new Map(Vars.MAP_X, Vars.MAP_Y, Vars.MAPFIELD_SIZE);
 		myPanel = new MapPanel(myMap, this);
+		PathDriveController pathDriver = new PathDriveController(myThymio);
+		pathDriver.setCalculatedPath(myMap.getCalculatedPath());
 		myThymio = new Thymio(myPanel);
 		observer = myThymio.getInterface();
 		
