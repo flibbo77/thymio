@@ -17,6 +17,7 @@ import javax.swing.BoxLayout;
 import threads.DriveNumOfFieldsThread;
 import threads.TurnThread;
 import threads.TurnToFixedOrientationThread;
+import thymio.PathDriveController;
 import thymio.Thymio;
 import thymio.ThymioDrivingThread;
 
@@ -42,6 +43,11 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		this.addKeyListener(this);
 		this.setFocusable(true);
 		this.requestFocusInWindow();
+	}
+	
+	private PathDriveController m_pdc = null;
+	public void setDriveController(PathDriveController pdc) {
+		m_pdc = pdc;
 	}
 
 	private void initUI() {
@@ -206,6 +212,12 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 				thread.start();
 			} 
 
+			break;
+			
+		case KeyEvent.VK_5:
+			if (m_pdc != null) {
+				m_pdc.start();
+			}
 			break;
 		
 		

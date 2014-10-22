@@ -37,4 +37,8 @@ public class ThymioInterface extends JFrame {
 	public int getVForward() {
 		return myPanel.getVForward();
 	}
+	
+	public ThymioPanel getThymioPanel() {
+		return myPanel;
+	}
 }

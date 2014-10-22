@@ -145,11 +145,13 @@ public class PathDriveController extends Thread {
 			// Do Turn
 			int turnDirection = getDegreesForPreset(curNaviPoint.m_turnDirection);
 			TurnToFixedOrientationThread turnThread = new TurnToFixedOrientationThread(turnDirection, m_Thymio);
+			turnThread.setName("NavThread:Turn: + " + i);
 			turnThread.start();
 			turnThread.join();
 			
 			// Drive Fields
 			DriveNumOfFieldsThread driveThread = new DriveNumOfFieldsThread(curNaviPoint.m_fieldsToDrive, m_Thymio);
+			driveThread.setName("NavThread:Drive: + " + i);
 			driveThread.start();
 			driveThread.join();
 		}
@@ -157,8 +159,6 @@ public class PathDriveController extends Thread {
 
 	@Override
 	public void run() {
-		super.run();
-		
 		waitForInitialization();
 		
 		try {
@@ -173,7 +173,7 @@ public class PathDriveController extends Thread {
 	 * If thread is started to early for whatever reason, it will not continue until it is complete
 	 */
 	private void waitForInitialization() {
-		while (!m_bIsAnalyzed || !m_bIsInitialized) {
+		while (!m_bIsAnalyzed || !m_bIsInitialized || m_Thymio == null) {
 			try {
 				wait(1000);
 			} catch (InterruptedException e) {
