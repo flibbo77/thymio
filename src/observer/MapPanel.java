@@ -1,5 +1,7 @@
 package observer;
 
+import helpers.Vars;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
@@ -16,17 +18,17 @@ public class MapPanel extends JPanel {
 	private static final long serialVersionUID = 1L;
 	public Map myMap;
 	public static final int LENGTHSCALE = 10;
-	public static final double LENGTH_EDGE_CM = 3.5;
+	public static final double LENGTH_EDGE_CM = Vars.MAPFIELD_SIZE;
 
 	public MapPanel(Map m, JFrame f) {
 		myMap = m;
 
-		this.setPreferredSize(new Dimension(myMap.getSizeX() * LENGTHSCALE,
-				myMap.getSizeY() * LENGTHSCALE));
-		this.setMaximumSize(new Dimension(myMap.getSizeX() * LENGTHSCALE, myMap
-				.getSizeY() * LENGTHSCALE));
-		this.setMinimumSize(new Dimension(myMap.getSizeX() * LENGTHSCALE, myMap
-				.getSizeY() * LENGTHSCALE));
+		this.setPreferredSize(new Dimension(myMap.getSizeY() * LENGTHSCALE,
+				myMap.getSizeX() * LENGTHSCALE));
+		this.setMaximumSize(new Dimension(myMap.getSizeY() * LENGTHSCALE, myMap
+				.getSizeX() * LENGTHSCALE));
+		this.setMinimumSize(new Dimension(myMap.getSizeY() * LENGTHSCALE, myMap
+				.getSizeX() * LENGTHSCALE));
 	}
 
 	public void setPose(double x, double y, double theta) {
@@ -44,14 +46,14 @@ public class MapPanel extends JPanel {
 		double angle = myMap.getThymioOrientation();
 
 		g.setColor(Color.WHITE);
-		g.clearRect(0, 0, this.getWidth(), this.getHeight());
+		g.clearRect(0, 0, this.getHeight(), this.getWidth());
 
 		g.setColor(Color.BLACK);
 
-		for (int i = 1; i < myMap.getSizeX(); i++)
+		for (int i = 1; i < myMap.getSizeY(); i++)
 			g.drawLine(LENGTHSCALE * i - 1, 0, LENGTHSCALE * i - 1,
 					this.getHeight());
-		for (int i = 1; i < myMap.getSizeY(); i++)
+		for (int i = 1; i < myMap.getSizeX(); i++)
 			g.drawLine(0, LENGTHSCALE * i - 1, this.getWidth(), LENGTHSCALE * i
 					- 1);
 
@@ -98,10 +100,10 @@ public class MapPanel extends JPanel {
 
 		g.setColor(Color.RED);
 		g.drawRect(
-				(int) (myMap.getEstimPosX() / MapPanel.LENGTH_EDGE_CM * MapPanel.LENGTHSCALE),
+				(int) (myMap.getEstimPosY() / MapPanel.LENGTH_EDGE_CM * MapPanel.LENGTHSCALE),
 				this.getHeight()
 						- 5
-						- (int) (myMap.getEstimPosY() / MapPanel.LENGTH_EDGE_CM * MapPanel.LENGTHSCALE),
+						- (int) (myMap.getEstimPosX() / MapPanel.LENGTH_EDGE_CM * MapPanel.LENGTHSCALE),
 				5, 5);
 
 		double diffSensor = 20.0 * Math.PI / 180.0; // calc bogenmaß

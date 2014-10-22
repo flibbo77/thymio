@@ -41,6 +41,9 @@ public class Vars {
 	public static final short CORRECTION_SPEED = 7;
 	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
 	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2000;
+	
+	public static final int ROT_DIRECTION_TO_RIGHT = 1;
+	public static final int ROT_DIRECTION_TO_LEFT = 2;
 
 	public static String toString(int var) {
 		switch (var) {
