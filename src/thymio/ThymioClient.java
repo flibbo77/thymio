@@ -47,7 +47,7 @@ public class ThymioClient {
 	private void connect() throws IOException {
 		long connectStartTime = System.currentTimeMillis();
 
-		conn = new Socket("192.168.2.64", 6789);
+		conn = new Socket("192.168.178.64", 6789);
 		//System.out.println("Time for new Socket:  " + (System.currentTimeMillis() - connectStartTime));
 		printWriter =
 				new PrintWriter(
@@ -65,9 +65,17 @@ public class ThymioClient {
 	public void setVariable(String variable, List<Short> data) {		
 		if(!Vars.rotate && variable.equals("motor.right.target") && data.get(0) > 50){
 			short temp = data.get(0);
-			temp += Vars.MOTOR_CORR;
+			temp += Vars.MOTOR_CORR_STRAIGHT;
 			data.set(0,temp);
 		}
+		
+		if(Vars.rotate && variable.equals("motor.right.target") && data.get(0)!= 0 ){
+			short temp = data.get(0);
+			temp += Vars.MOTOR_CORR_ROT * Vars.actualRotDirection;
+			System.out.println(Vars.MOTOR_CORR_ROT * Vars.actualRotDirection);
+			data.set(0,temp);
+		}
+		
 		try {
 			String msg = "set " + variable;
 

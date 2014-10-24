@@ -10,7 +10,7 @@ target/
 *.class
  
 # Package Files #
-*.jar
+# *.jar
 *.war
 *.ear
 *.db
@@ -45,7 +45,7 @@ Desktop.ini
 ######################
  
 *.pydevproject
-.project
+# .project
 .metadata
 bin/**
 tmp/**

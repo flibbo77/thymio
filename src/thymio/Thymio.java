@@ -115,7 +115,10 @@ public class Thymio {
 			int proxGroundLeft;
 			int proxGroundRight;
 			if (!Vars.rotate)
-				motorCorrection = Vars.MOTOR_CORR;
+				motorCorrection = Vars.MOTOR_CORR_STRAIGHT;
+
+			else if (Vars.rotate)
+				motorCorrection = (short) (Vars.MOTOR_CORR_ROT * Vars.actualRotDirection);
 
 			sensorData = myClient.getVariable("motor.left.speed");
 			if (sensorData != null) {
@@ -145,7 +148,8 @@ public class Thymio {
 				odomRight = 0;
 
 			logData.print(odomLeft + "\t" + odomRight + "\t");
-			//System.out.println("links: " + odomLeft + "rechts: " + odomRight);
+			// System.out.println("links: " + odomLeft + "rechts: " +
+			// odomRight);
 
 			odomForward = secsElapsed * (odomLeft + odomRight)
 					/ (2.0 * 10.0 * SPEEDCOEFF); // estimated distance in cm
@@ -185,7 +189,7 @@ public class Thymio {
 			actualField = Vars.WHITE_FIELD;
 		else if (proxGroundLeft < 550 && proxGroundRight < 550)
 			actualField = Vars.BLACK_FIELD;
-		//System.out.println("Farbe des Feldes: " + actualField);
+		// System.out.println("Farbe des Feldes: " + actualField);
 	}
 
 	private void checkInFieldPosition(int proxGroundLeft, int proxGroundRight) {

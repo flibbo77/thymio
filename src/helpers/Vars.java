@@ -11,15 +11,16 @@ public class Vars {
 	public static final int NEAST_SWEST = 6;
 	public static final int SWEST_NEAST = 7;
 
-	public static final int MAP_X = 9;
-	public static final int MAP_Y = 20;
+	public static final int MAP_X = 4;//9
+	public static final int MAP_Y = 6;//20
 	public static final double MAPFIELD_SIZE = 17;
-	public static final int NUM_BARRIERS = 10;
+	public static final int NUM_BARRIERS = 4;
 	public static final boolean USE_DIAGONALS = false;
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR = 0;
+	public static final short MOTOR_CORR_STRAIGHT = 6;
+	public static final short MOTOR_CORR_ROT = 0;
 	
 	public static final int BLACK_FIELD = 0;
 	public static final int WHITE_FIELD = 1;
@@ -31,6 +32,7 @@ public class Vars {
 	public static final int START_FIELD_COLOR = BLACK_FIELD;
 	
 	public static boolean rotate = false;
+	public static int actualRotDirection = 0;
 	
 
 	public static final double ROT_MALUS = 3; // Wert, der in der Routenplanung

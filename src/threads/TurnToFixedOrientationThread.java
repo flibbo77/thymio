@@ -51,6 +51,8 @@ public class TurnToFixedOrientationThread extends Thread {
 				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
 			}
 		}
+		
+		Vars.actualRotDirection = getTurnDirection();
 	}
 
 	public void run() {
@@ -60,7 +62,7 @@ public class TurnToFixedOrientationThread extends Thread {
 		if (rotDirection == Vars.ROT_DIRECTION_TO_RIGHT)
 			speed *= -1;
 
-		Vars.rotate = true;
+
 
 		thy.isDriving = true;
 		thy.updatePose(System.currentTimeMillis());
@@ -71,9 +73,11 @@ public class TurnToFixedOrientationThread extends Thread {
 
 	private void rotate() {
 		boolean didAnything = false;
+		Vars.rotate = true;
 		System.out.println("rotate, speed: " + speed);
-		thy.setVRight(speed);
 		thy.setVLeft((short) -speed);
+		thy.setVRight(speed);
+		
 		thy.updatePose(System.currentTimeMillis());
 
 		actualOrientation = calcThymioOrientation();
@@ -88,6 +92,7 @@ public class TurnToFixedOrientationThread extends Thread {
 		thy.updatePose(System.currentTimeMillis());
 		thy.setVLeft((short) 0);
 		thy.setVRight((short) 0);
+		Vars.rotate = false;
 		thy.isDriving = false;
 
 		thy.updatePose(System.currentTimeMillis());
@@ -95,9 +100,18 @@ public class TurnToFixedOrientationThread extends Thread {
 
 		
 		if (Vars.USE_ROT_CORRECTION)
-			if (didAnything)
+			if (didAnything){
 				doCorrectionIfNecessary();
-
+			}
+	}
+	
+	private int getTurnDirection(){
+		if(rotDirection == Vars.ROT_DIRECTION_TO_LEFT)
+			return 1;
+		else if(rotDirection == Vars.ROT_DIRECTION_TO_RIGHT)
+			return -1;
+		
+		return 0;
 	}
 
 	private boolean checkCondition() {
