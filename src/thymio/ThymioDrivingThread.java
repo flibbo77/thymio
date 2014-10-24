@@ -15,7 +15,7 @@ public class ThymioDrivingThread extends Thread {
 			try {
 				Thread.sleep(1);
 				
-				myThymio.updatePose(System.currentTimeMillis());
+				//myThymio.updatePose(System.currentTimeMillis());
 
 			} catch (InterruptedException e) {
 				// TODO Auto-generated catch block

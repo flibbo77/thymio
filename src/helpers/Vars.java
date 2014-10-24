@@ -17,9 +17,9 @@ public class Vars {
 	public static final int NUM_BARRIERS = 10;
 	public static final boolean USE_DIAGONALS = false;
 
-	public static final double THYMIO_SPEED_COEF = 3.75;
+	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR = 5;
+	public static final short MOTOR_CORR = 0;
 	
 	public static final int BLACK_FIELD = 0;
 	public static final int WHITE_FIELD = 1;
@@ -37,10 +37,14 @@ public class Vars {
 												// mit Dikstra jede nötige
 												// Rotation mit einem Malus
 												// versieht
-	public static final short TURN_SPEED = 49;
-	public static final short CORRECTION_SPEED = 7;
+	public static final short TURN_SPEED = 45;
+	public static final short CORRECTION_SPEED = 5;
 	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
 	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2000;
+	public static final int ROT_DIRECTION_TO_RIGHT = 0;
+	public static final int ROT_DIRECTION_TO_LEFT = 1;
+	public static final int ROT_DIRECTION_NONE = 2;
+	public static final boolean USE_ROT_CORRECTION = true;
 
 	public static String toString(int var) {
 		switch (var) {
@@ -49,7 +53,7 @@ public class Vars {
 		case _270_DEGREES:
 			return "270 Grad";
 		case _180_DEGREES:
-			return "180 Gradt";
+			return "180 Grad";
 		case _0_DEGREES:
 			return "0 Grad";
 		case 4:

@@ -37,7 +37,7 @@ public class Thymio {
 	private int turnSpeed;
 
 	public static final double MAXSPEED = 500;
-	public static final double SPEEDCOEFF = 2.93;
+	public static final double SPEEDCOEFF = Vars.THYMIO_SPEED_COEF;
 	public static final double BASE_WIDTH = 95;
 	public static final int ODOM_THRESH = 30;
 
@@ -145,7 +145,7 @@ public class Thymio {
 				odomRight = 0;
 
 			logData.print(odomLeft + "\t" + odomRight + "\t");
-			System.out.println("links: " + odomLeft + "rechts: " + odomRight);
+			//System.out.println("links: " + odomLeft + "rechts: " + odomRight);
 
 			odomForward = secsElapsed * (odomLeft + odomRight)
 					/ (2.0 * 10.0 * SPEEDCOEFF); // estimated distance in cm
@@ -185,7 +185,7 @@ public class Thymio {
 			actualField = Vars.WHITE_FIELD;
 		else if (proxGroundLeft < 550 && proxGroundRight < 550)
 			actualField = Vars.BLACK_FIELD;
-		System.out.println("Farbe des Feldes: " + actualField);
+		//System.out.println("Farbe des Feldes: " + actualField);
 	}
 
 	private void checkInFieldPosition(int proxGroundLeft, int proxGroundRight) {

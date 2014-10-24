@@ -115,7 +115,7 @@ public class Map {
 		posX += delta[0];
 		posY += delta[1];
 
-		System.out.println("Theta: " + Math.toDegrees(thymioTheta));
+		//System.out.println("Theta: " + Math.toDegrees(thymioTheta));
 
 		// observation model
 
