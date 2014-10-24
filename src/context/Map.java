@@ -167,6 +167,10 @@ public class Map {
 	public double getEstimPosY() {
 		return estPosY;
 	}
+	
+	public double getEstimOrientation() {
+		return estTheta;
+	}
 
 	public double getPosX() {
 		return posX;
