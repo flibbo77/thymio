@@ -90,21 +90,39 @@ public class PathDriveController extends Thread {
 		// Get first direction
 		lastDirection = getDirectionBetweenCoordinates(lastCoord, m_calculatedPath.get(1));
 		
-		for (int i = 1; i < m_calculatedPath.size(); i++) {
+		int pathSize = m_calculatedPath.size();
+		int curDirection = -1;
+		
+		for (int i = 1; i < pathSize; i++) {
 			Coordinate curCoord = m_calculatedPath.get(i);
 			
-			int curDirection = getDirectionBetweenCoordinates(lastCoord, curCoord);		
+			curDirection = getDirectionBetweenCoordinates(lastCoord, curCoord);		
 			
-			if ((lastDirection != curDirection) || (i == m_calculatedPath.size()-1)) {
+			if (lastDirection != curDirection) {
+				
 				m_navigationPoints.add(new NavigationPoint(lastDirection, fieldCounter));
 				
 				lastDirection = curDirection;
 				fieldCounter = 1;
+				
+				if ((i == pathSize-1)) {
+					/*
+					 * So this is the case when the last pathnode has an other direction than the ones before
+					 * FieldCounter is always 1 at this point.
+					 * Direction of the last field will be saved in lastDirection
+					 */
+					m_navigationPoints.add(new NavigationPoint(lastDirection, fieldCounter));
+				}
+	
 			} else {
 				fieldCounter++;
 			}
 			
 			lastCoord = curCoord;
+		}
+		
+		if (fieldCounter > 1) {
+			m_navigationPoints.add(new NavigationPoint(lastDirection, fieldCounter));
 		}
 		
 		m_bIsAnalyzed = true;

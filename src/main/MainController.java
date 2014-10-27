@@ -33,8 +33,10 @@ public class MainController extends JFrame {
 		myMap = new Map(Vars.MAP_X, Vars.MAP_Y, Vars.MAPFIELD_SIZE);
 		myPanel = new MapPanel(myMap, this);
 		myThymio = new Thymio(myPanel);
+		
 		PathDriveController pathDriver = new PathDriveController(myThymio);
 		pathDriver.setCalculatedPath(myMap.getCalculatedPath());
+		
 
 		observer = myThymio.getInterface();
 		observer.getThymioPanel().setDriveController(pathDriver);
