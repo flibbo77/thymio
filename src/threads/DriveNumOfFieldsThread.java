@@ -7,9 +7,8 @@ public class DriveNumOfFieldsThread extends Thread {
 	private int numOfFields;
 	private int fieldCount;
 	private Thymio thy;
-	
+
 	private int previousFieldNum = -1;
-	
 
 	public DriveNumOfFieldsThread(int numOfFields, Thymio thy) {
 		this.numOfFields = numOfFields;
@@ -19,11 +18,20 @@ public class DriveNumOfFieldsThread extends Thread {
 	public void run() {
 		fieldCount = 0;
 		thy.driveStraight(Vars.DRIVE_SPEED);
-		while(fieldCount <= numOfFields){
+		while (fieldCount < numOfFields) {
 			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
+			if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_LEFT) {
+				System.out.println("too far left");
+				correctDirection(Vars.CORR_RIGHT);
+			} else if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_RIGHT) {
+				System.out.println("too far right");
+				correctDirection(Vars.CORR_LEFT);
+			}
+
 			updateFieldCount();
-			System.out.println("Time for DriveLoop: " +(System.currentTimeMillis() - startLoop));
+			System.out.println("Time for DriveLoop: "
+					+ (System.currentTimeMillis() - startLoop));
 		}
 		try {
 			Thread.sleep(Vars.GET_TO_CENTER_OF_MAP_ELEMENT_DELAY);
@@ -34,13 +42,32 @@ public class DriveNumOfFieldsThread extends Thread {
 		thy.stopMove();
 	}
 
+	private void correctDirection(int direction) {
+		short speed = Vars.CORRECTION_SPEED;
+		if (direction == Vars.CORR_LEFT){
+			speed *= -1;
+		}
+		
+		thy.stopMove();
+		thy.setVLeft((short) speed);
+		thy.setVRight((short) -speed);
+		long startTime = System.currentTimeMillis();
+		while(System.currentTimeMillis() - startTime < Vars.CORRECTION_TIME){
+			//do nothing
+		}
+		thy.stopMove();
+		thy.driveStraight(Vars.DRIVE_SPEED);
+		
+		
+	}
+
 	private void updateFieldCount() {
 		int currentField = thy.getActualField();
-		
+
 		if (currentField != previousFieldNum) {
 			++fieldCount;
 		}
-		
+
 		previousFieldNum = currentField;
 	}
 }

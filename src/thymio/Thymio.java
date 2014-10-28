@@ -4,9 +4,7 @@ import helpers.Vars;
 
 import java.io.FileWriter;
 import java.io.IOException;
-import java.io.PrintStream;
 import java.io.PrintWriter;
-import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -20,21 +18,18 @@ public class Thymio {
 	private ThymioDrivingThread myControlThread;
 	private ThymioClient myClient;
 	private long lastTimeStamp;
-	private long startTimeStamp;
-	private long timeCounter;
 	public MapPanel myPanel;
 	private PrintWriter logData;
 	private double theta = 0;
 	private short rightMotorSpeed;
 	private short leftMotorSpeed;
 	private int actualField;
-	private int inFieldPosition;
+	private int straightness;
 
 	public boolean isDriving = false;
 	public boolean rotate = false;
-	private int degrees = 0;
-	private long calcTurnTime = 0;
-	private int turnSpeed;
+	
+	private int[] proxSensors;
 
 	public static final double MAXSPEED = 500;
 	public static final double SPEEDCOEFF = Vars.THYMIO_SPEED_COEF;
@@ -52,7 +47,7 @@ public class Thymio {
 		myControlThread.start();
 		lastTimeStamp = Long.MIN_VALUE;
 		actualField = Vars.START_FIELD_COLOR;
-		inFieldPosition = Vars.POSITION_OK;
+		straightness = Vars.POSITION_OK;
 
 		setVLeft((short) 0);
 		setVRight((short) 0);
@@ -102,7 +97,6 @@ public class Thymio {
 
 			long dt = now - lastTimeStamp;
 			double secsElapsed = ((double) dt) / 1000.0;
-			// System.out.println("time: " + secsElapsed);
 			double distForward; // distance passed in secsElpased in forward
 								// direction of the robot
 			double distRotation; // angle covered in secsElapsed around Thymio's
@@ -121,8 +115,12 @@ public class Thymio {
 				motorCorrection = (short) (Vars.MOTOR_CORR_ROT * Vars.actualRotDirection);
 
 			sensorData = myClient.getVariable("motor.left.speed");
+//			sensorData = new ArrayList<>();
+//			sensorData.add((short) 100);
+//			
 			if (sensorData != null) {
 				odomLeft = sensorData.get(0);
+				
 				leftMotorSpeed = odomLeft;
 			} else
 				System.out.println("no data for motor.left.speed");
@@ -136,9 +134,18 @@ public class Thymio {
 			sensorData = myClient.getVariable("prox.ground.delta");
 			proxGroundLeft = sensorData.get(0);
 			proxGroundRight = sensorData.get(1);
-
-			checkInFieldPosition(proxGroundLeft, proxGroundRight);
 			checkActualFieldColor(proxGroundLeft, proxGroundRight);
+			checkStraightness(proxGroundLeft, proxGroundRight);
+			
+			/*sensorData = myClient.getVariable("prox.horizontal");
+			proxSensors = new int[sensorData.size()];
+			for(int i = 0; i < sensorData.size(); i++){
+				proxSensors[i] = sensorData.get(i);
+			}*/
+			
+			//checkCollision();
+
+			
 
 			if (odomLeft == Short.MIN_VALUE || odomRight == Short.MIN_VALUE)
 				return;
@@ -148,8 +155,6 @@ public class Thymio {
 				odomRight = 0;
 
 			logData.print(odomLeft + "\t" + odomRight + "\t");
-			// System.out.println("links: " + odomLeft + "rechts: " +
-			// odomRight);
 
 			odomForward = secsElapsed * (odomLeft + odomRight)
 					/ (2.0 * 10.0 * SPEEDCOEFF); // estimated distance in cm
@@ -157,7 +162,6 @@ public class Thymio {
 													// seconds.
 			odomRotation = 0.5 * secsElapsed
 					* Math.atan2(odomRight - odomLeft, BASE_WIDTH);
-			// System.out.println("odomRot: " + odomRotation);
 
 			distForward = myInterface.getVForward() * secsElapsed;
 			distRotation = Math.PI / 180 * myInterface.getOrientation()
@@ -166,13 +170,10 @@ public class Thymio {
 			theta += odomRotation;
 
 			logData.print(odomForward + "\t" + distForward + "\t"
-					+ new BigDecimal(odomRotation) + "\t" + distRotation + "\t"
+					+ odomRotation + "\t" + distRotation + "\t"
 					+ theta + "\t");
 
-			// if (distForward == 0 && distRotation == 0)
-			// myPanel.updatePose(distForward, distRotation, secsElapsed);
-			// else
-			myPanel.updatePose(odomForward, odomRotation, secsElapsed);
+			//myPanel.updatePose(odomForward, odomRotation, secsElapsed);
 
 			logData.print(myPanel.getEstimPosX() + "\t"
 					+ myPanel.getEstimPosY() + "\t");
@@ -181,7 +182,6 @@ public class Thymio {
 		}
 		lastTimeStamp = now;
 
-		// notify();
 	}
 
 	private void checkActualFieldColor(int proxGroundLeft, int proxGroundRight) {
@@ -189,24 +189,39 @@ public class Thymio {
 			actualField = Vars.WHITE_FIELD;
 		else if (proxGroundLeft < 550 && proxGroundRight < 550)
 			actualField = Vars.BLACK_FIELD;
-		// System.out.println("Farbe des Feldes: " + actualField);
 	}
 
-	private void checkInFieldPosition(int proxGroundLeft, int proxGroundRight) {
-		if (actualField == Vars.WHITE_FIELD && proxGroundLeft > 550
-				&& proxGroundRight < 550)
-			inFieldPosition = Vars.TO_FAR_RIGHT;
-		else if (actualField == Vars.BLACK_FIELD && proxGroundLeft < 550
-				&& proxGroundRight < 550)
-			inFieldPosition = Vars.TO_FAR_LEFT;
+	private void checkStraightness(int proxGroundLeft, int proxGroundRight) {
+		straightness = Vars.CORRECT_STRAIGHTNESS;
+		System.out.println("left sensor: " + proxGroundLeft + " right sensor: "
+				+ proxGroundRight);
+		if (actualField == Vars.WHITE_FIELD
+				&& proxGroundLeft - proxGroundRight > Vars.FRONT_SENSOR_SIGN_DIFF)
+			straightness = Vars.TOO_FAR_TURNED_TO_LEFT;
+		else if (actualField == Vars.WHITE_FIELD && proxGroundLeft - proxGroundRight < -Vars.FRONT_SENSOR_SIGN_DIFF)
+			straightness = Vars.TOO_FAR_TURNED_TO_RIGHT;
+		else if (actualField == Vars.BLACK_FIELD && proxGroundRight - proxGroundLeft > Vars.FRONT_SENSOR_SIGN_DIFF)
+			straightness = Vars.TOO_FAR_TURNED_TO_LEFT;
+		else if (actualField == Vars.BLACK_FIELD && proxGroundRight - proxGroundLeft < -Vars.FRONT_SENSOR_SIGN_DIFF)
+			straightness = Vars.TOO_FAR_TURNED_TO_RIGHT;
+		else
+			straightness = Vars.CORRECT_STRAIGHTNESS;
+	}
+	
+	private void checkCollision(){
+		for(int i = 0; i < proxSensors.length; i++){
+			if (proxSensors[i] > Vars.COLLISION_SENSOR_VALUE){
+				stopMove();
+			}
+		}
 	}
 
 	public int getActualField() {
 		return actualField;
 	}
 
-	public int getInFieldPosition() {
-		return inFieldPosition;
+	public int getStraightness() {
+		return straightness;
 	}
 
 	public void stopMove() {

@@ -23,9 +23,7 @@ import thymio.ThymioDrivingThread;
 
 public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		ActionListener {
-	/**
-	 * 
-	 */
+	
 	private static final long serialVersionUID = 1L;
 	private Thymio myThymio;
 	private ThymioInterface myUI;
@@ -44,8 +42,9 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		this.setFocusable(true);
 		this.requestFocusInWindow();
 	}
-	
+
 	private PathDriveController m_pdc = null;
+
 	public void setDriveController(PathDriveController pdc) {
 		m_pdc = pdc;
 	}
@@ -89,16 +88,15 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 
 	@Override
 	public void stateChanged(ChangeEvent e) {
-		
+
 		if (e.getSource().equals(vForward)) {
 			valVelocity.setText("velocity (cm/sec): " + vForward.getValue());
-			if(vForward.getValue() != 0) myThymio.isDriving = true;
-			else myThymio.isDriving = false;
+			if (vForward.getValue() != 0)
+				myThymio.isDriving = true;
+			else
+				myThymio.isDriving = false;
 			updateThymio();
 		} else if (e.getSource().equals(theta)) {
-			/*
-			 * if (!theta.getValueIsAdjusting()) { updateThymio(); }
-			 */
 			valTheta.setText("turn angle (degree): " + theta.getValue());
 			updateThymio();
 
@@ -121,20 +119,13 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		}
 
 		synchronized (myThymio) {
-			// try {
-			// myThymio.wait();
-			myThymio.setVRight((short) (v/2 + angle));
-			myThymio.setVLeft((short) (v/2 - angle));
+			myThymio.setVRight((short) (v / 2 + angle));
+			myThymio.setVLeft((short) (v / 2 - angle));
 			myThymio.updatePose(System.currentTimeMillis());
 
 			myThymio.setVLeft((short) (v - angle));
 			myThymio.setVRight((short) (v + angle));
 
-			// } catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			// e.printStackTrace();
-			// }
-			
 			myThymio.updatePose(System.currentTimeMillis());
 		}
 	}
@@ -149,97 +140,67 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 
 	@Override
 	public void keyPressed(KeyEvent e) {
-		// TODO Auto-generated method stub
-
 		switch (e.getKeyCode()) {
 		case KeyEvent.VK_LEFT:
 			// startRotation(-90);
 			theta.setValue(theta.getValue() - 20);
 			break;
-
 		case KeyEvent.VK_RIGHT:
 			// startRotation(90);
 			theta.setValue(theta.getValue() + 20);
-
 			break;
-
 		case KeyEvent.VK_UP:
 			vForward.setValue(vForward.getValue() + 5);
 			break;
-
 		case KeyEvent.VK_DOWN:
 			vForward.setValue(vForward.getValue() - 5);
 			break;
-
 		case KeyEvent.VK_SPACE:
 			myThymio.stopMove();
 			vForward.setValue(0);
 			theta.setValue(0);
-
 			break;
-
 		case KeyEvent.VK_1:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
 				thread = new TurnToFixedOrientationThread(0, myThymio);
 				thread.start();
-			} 
-
+			}
 			break;
-		
 		case KeyEvent.VK_2:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
 				thread = new TurnToFixedOrientationThread(90, myThymio);
 				thread.start();
-			} 
-
+			}
 			break;
-			
 		case KeyEvent.VK_3:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
 				thread = new TurnToFixedOrientationThread(180, myThymio);
 				thread.start();
-			} 
-
+			}
 			break;
-		
 		case KeyEvent.VK_4:
 			System.out.println(thread);
 			if (thread == null || !thread.isAlive()) {
 				thread = new TurnToFixedOrientationThread(270, myThymio);
 				thread.start();
-			} 
-
+			}
 			break;
-			
 		case KeyEvent.VK_5:
 			if (m_pdc != null) {
 				m_pdc.start();
 			}
 			break;
-		
-		
-			
 		case KeyEvent.VK_Z:
-			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(1,myThymio);
+			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(1,
+					myThymio);
 			myDriver.start();
-
 		default:
 			break;
 		}
-
 		this.repaint();
-	}
-
-	@Override
-	public void keyReleased(KeyEvent e) {
-	}
-
-	@Override
-	public void keyTyped(KeyEvent e) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
@@ -251,12 +212,15 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		}
 	}
 
-	public void rotate(int speed) {
-		System.out.println("rotate " + speed);
-		theta.setValue(theta.getValue() + speed);
+	@Override
+	public void keyReleased(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 
-	public void drive(int speed) {
-		vForward.setValue(speed);
+	@Override
+	public void keyTyped(KeyEvent arg0) {
+		// TODO Auto-generated method stub
+
 	}
 }
