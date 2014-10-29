@@ -1,13 +1,17 @@
 package observer;
 
+import helpers.Vars;
+
 import java.awt.Color;
 import java.awt.Dimension;
+import java.awt.Font;
 import java.awt.Graphics;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
 
 import context.Map;
+import context.MapElement;
 
 public class MapPanel extends JPanel {
 	/**
@@ -15,7 +19,7 @@ public class MapPanel extends JPanel {
 	 */
 	private static final long serialVersionUID = 1L;
 	public Map myMap;
-	public static final int LENGTHSCALE = 10;
+	public static final int LENGTHSCALE = 30;
 	public static final double LENGTH_EDGE_CM = 3.5;
 	
 	public MapPanel(Map m, JFrame f) {
@@ -44,11 +48,62 @@ public class MapPanel extends JPanel {
 		
 		g.setColor(Color.BLACK);
 
-		for (int i = 1; i < myMap.getSizeX(); i++) g.drawLine(LENGTHSCALE *i-1, 0, LENGTHSCALE * i-1, this.getHeight());
-		for (int i = 1; i < myMap.getSizeY(); i++) g.drawLine(0, LENGTHSCALE * i-1, this.getWidth(), LENGTHSCALE * i-1);
+		/*
+		 * Draw Lines
+		 */
+//		for (int i = 1; i <= myMap.getSizeX(); i++) {
+//			g.drawLine(LENGTHSCALE *i-1, 0, LENGTHSCALE * i-1, this.getHeight());
+//		}
+//		
+//		for (int i = 1; i <= myMap.getSizeY(); i++) {
+//			g.drawLine(0, LENGTHSCALE * i-1, this.getWidth(), LENGTHSCALE * i-1);
+//		}
+//		
+		
+		/*
+		 * Draw fields
+		 */
+		g.setColor(Color.LIGHT_GRAY);
+		for (int i = 0; i < myMap.getSizeX(); i++) {
+			
+			int curEvenCheck = 0;
+			if (i % 2 == 1) {
+				curEvenCheck = 1;
+			} else {
+				curEvenCheck = 0;
+			}
+			
+			for (int j = 0; j < myMap.getSizeY(); j++) {
+				if (j % 2 == curEvenCheck) {
+					continue;
+				}
+				
+				g.fillRect(LENGTHSCALE * i, LENGTHSCALE * j, LENGTHSCALE, LENGTHSCALE);
+			}
+		}
+		
 		
 		for (int x = 0; x < myMap.getSizeX(); x++) {
 			for (int y = 0; y < myMap.getSizeY(); y++) {
+				
+				// Draw Obstacles
+				MapElement curElement = myMap.getArray()[x][y];
+				if (curElement.isOccupied()) {
+					g.setColor(Color.PINK);
+					g.fillRect(LENGTHSCALE * x, LENGTHSCALE * y, LENGTHSCALE, LENGTHSCALE);
+				}
+				
+				// Draw Path
+				if (curElement.isOnPath()) {
+					g.setColor(Color.BLACK);
+					g.fillRect(LENGTHSCALE * x + LENGTHSCALE/2 - LENGTHSCALE/8, LENGTHSCALE * y + LENGTHSCALE/2  - LENGTHSCALE/8, LENGTHSCALE/4, LENGTHSCALE/4);
+				}
+				
+				if (Vars.DRAW_FIELD_IDS) {
+					g.setColor(Color.BLACK);
+					g.setFont(new Font("TimesRoman", Font.PLAIN, 8));
+					g.drawString("("+x+","+y+")", LENGTHSCALE * x + LENGTHSCALE/10, LENGTHSCALE * y + LENGTHSCALE/5);
+				}
 				/*
 				if (x == myMap.getThymioX() && y == myMap.getThymioY()) {
 					int [] rotX = new int[3];
@@ -82,6 +137,7 @@ public class MapPanel extends JPanel {
 				}
 			}
 		}
+		
 		
 		g.fillRect((int)(myMap.getPosX()/MapPanel.LENGTH_EDGE_CM*MapPanel.LENGTHSCALE), this.getHeight() - 5 - (int)(myMap.getPosY()/MapPanel.LENGTH_EDGE_CM*MapPanel.LENGTHSCALE), 5, 5);
 		

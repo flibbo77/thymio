@@ -1,4 +1,4 @@
-package threads;
+ package threads;
 
 import helpers.Vars;
 import thymio.Thymio;

@@ -11,10 +11,11 @@ public class Vars {
 	public static final int NEAST_SWEST = 6;
 	public static final int SWEST_NEAST = 7;
 
-	public static final int MAP_X = 4;//9
+	public static final int MAP_X = 9;//9
 	public static final int MAP_Y = 20;//20
 	public static final double MAPFIELD_SIZE = 17;
 	public static final int NUM_BARRIERS = 4;
+	public static final boolean DRAW_FIELD_IDS = false;
 	public static final boolean USE_DIAGONALS = false;
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
