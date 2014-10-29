@@ -18,7 +18,7 @@ public class MapElement {
 	private boolean onBeam;			// set temporarily if the element is hit by infrared beam
 	private boolean onPath;
 	
-	private int direction;
+	//private int direction;
 	
 	
 	//variables for search algorithm
@@ -42,13 +42,13 @@ public class MapElement {
 		edges = new ArrayList<Edge>();
 	}
 	
-	public int getDirection() {
-		return direction;
-	}
-
-	public void setDirection(int direction) {
-		this.direction = direction;
-	}
+//	public int getDirection() {
+//		return direction;
+//	}
+//
+//	public void setDirection(int direction) {
+//		this.direction = direction;
+//	}
 
 	
 	public int getPosX() {
