@@ -83,7 +83,7 @@ public class PathDriveController extends Thread {
 		m_navigationPoints = new ArrayList<NavigationPoint>();
 		
 		int lastDirection = -1;
-		int fieldCounter = 1; 
+		int fieldCounter = 0; 
 		
 		Coordinate lastCoord = m_calculatedPath.get(0);
 		

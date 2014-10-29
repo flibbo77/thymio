@@ -288,10 +288,10 @@ public class Map {
 	}
 
 	public void printMap() {
-		for (int x = 0; x < sizeX; x++) {
-			for (int y = 0; y < sizeY; y++) {
+		for (int x = 0; x < sizeY; x++) {
+			for (int y = 0; y < sizeX; y++) {
 
-				MapElement e = element[x][y];
+				MapElement e = element[y][x];
 
 				System.out.print(e.isOccupied() ? "X" : "F");
 				System.out.print(e.onBeam() ? "B" : "-");
