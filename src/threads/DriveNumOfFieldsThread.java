@@ -43,12 +43,17 @@ public class DriveNumOfFieldsThread extends Thread {
 	}
 
 	private void correctDirection(int direction) {
-		short speed = Vars.CORRECTION_SPEED;
+		short speed = -Vars.CORRECTION_SPEED;
+		thy.stopMove();
 		if (direction == Vars.CORR_LEFT){
-			speed *= -1;
+			//speed *= -1;
+			thy.setVRight(speed);
+		}else if (direction == Vars.CORR_RIGHT){
+			thy.setVLeft(speed);
 		}
 		
-		thy.stopMove();
+		
+		
 		thy.setVLeft((short) speed);
 		thy.setVRight((short) -speed);
 		long startTime = System.currentTimeMillis();

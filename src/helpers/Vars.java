@@ -12,7 +12,7 @@ public class Vars {
 	public static final int SWEST_NEAST = 7;
 
 	public static final int MAP_X = 4;//9
-	public static final int MAP_Y = 20;//20
+	public static final int MAP_Y = 8;//20
 	public static final double MAPFIELD_SIZE = 17;
 	public static final int NUM_BARRIERS = 4;
 	public static final boolean USE_DIAGONALS = false;
@@ -40,21 +40,23 @@ public class Vars {
 												// mit Dikstra jede nötige
 												// Rotation mit einem Malus
 												// versieht
-	public static final short TURN_SPEED = 43;
+	public static final short TURN_SPEED = 49;
 	public static final short CORRECTION_SPEED = 30;
 	
 	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
-	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2600;
+	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2300;
 	public static final int ROT_DIRECTION_TO_RIGHT = 0;
 	public static final int ROT_DIRECTION_TO_LEFT = 1;
 	public static final int ROT_DIRECTION_NONE = 2;
 	public static final boolean USE_ROT_CORRECTION = true;
 	public static final int CORR_RIGHT = -1;
 	public static final int CORR_LEFT = 1;
-	public static final int FRONT_SENSOR_SIGN_DIFF = 190;
+	public static final int FRONT_SENSOR_SIGN_DIFF = 180;
 	public static final long CORRECTION_TIME = 500;
 	public static final int COLLISION_SENSOR_VALUE = 1000;
 	public static final long TURN_TIME = 4000;
+	
+	public static int actualFixedOrientation = 0;
 	
 
 	public static String toString(int var) {

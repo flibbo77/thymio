@@ -11,7 +11,6 @@ public class TurnToFixedOrientationThread extends Thread {
 	double actualOrientation;
 	Thymio thy;
 
-	int actualFixedOrientation = 0;
 
 	public TurnToFixedOrientationThread(int orientation, Thymio myThymio) {
 		System.out.println("orientation: " + orientation);
@@ -24,6 +23,7 @@ public class TurnToFixedOrientationThread extends Thread {
 	}
 
 	private void calcRotDirection() {
+		/*
 		double actOrient = calcThymioOrientation();
 		if (desiredOrientation == 0.0) {
 			//if (actualFixedOrientation == 0) {
@@ -61,20 +61,102 @@ public class TurnToFixedOrientationThread extends Thread {
 		}
 
 		Vars.actualRotDirection = getTurnDirection();
+	*/
+		
+		switch(desiredOrientation){
+		case 0:
+			switch(Vars.actualFixedOrientation){
+			case 0:
+				rotDirection = Vars.ROT_DIRECTION_NONE;
+				break;
+			case 90:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			case 180:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			case 270:
+				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
+				break;
+			}
+			break;
+			
+		case 90:
+			switch(Vars.actualFixedOrientation){
+			case 0:
+				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
+				break;
+			case 90:
+				rotDirection = Vars.ROT_DIRECTION_NONE;
+				break;
+			case 180:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			case 270:
+				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
+				break;
+			}
+			break;
+		
+		case 180:
+			switch(Vars.actualFixedOrientation){
+			case 0:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			case 90:
+				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
+				break;
+			case 180:
+				rotDirection = Vars.ROT_DIRECTION_NONE;
+				break;
+			case 270:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			}
+			break;
+			
+		case 270:
+			switch(Vars.actualFixedOrientation){
+			case 0:
+				rotDirection = Vars.ROT_DIRECTION_TO_RIGHT;
+				break;
+			case 90:
+				rotDirection = Vars.ROT_DIRECTION_NONE;
+				break;
+			case 180:
+				rotDirection = Vars.ROT_DIRECTION_TO_LEFT;
+				break;
+			case 270:
+				rotDirection = Vars.ROT_DIRECTION_NONE;
+				break;
+			}
+			break;
+		}
 	}
 
 	public void run() {
 		// thy.rotate = true;
-		if (rotDirection == Vars.ROT_DIRECTION_NONE)
+		//rotDirection = getTurnDirection();
+		if (rotDirection == Vars.ROT_DIRECTION_NONE){
+			System.out.println("rotDirecton: None");
 			return;
-		if (rotDirection == Vars.ROT_DIRECTION_TO_RIGHT)
-			speed *= -1;
+		}
+		speed *= getTurnDirection();
 
 		thy.isDriving = true;
 		thy.updatePose(System.currentTimeMillis());
 
 		rotate();
 
+	}
+	
+	private int getTurnDirection() {
+		if (rotDirection == Vars.ROT_DIRECTION_TO_LEFT)
+			return 1;
+		else if (rotDirection == Vars.ROT_DIRECTION_TO_RIGHT)
+			return -1;
+
+		return 0;
 	}
 
 	private void rotate() {
@@ -87,14 +169,14 @@ public class TurnToFixedOrientationThread extends Thread {
 
 		thy.updatePose(System.currentTimeMillis());
 
-		actualOrientation = calcThymioOrientation();
+		//actualOrientation = calcThymioOrientation();
 
 		while (checkCondition(startTime)) {
 			didAnything = true;
 			thy.updatePose(System.currentTimeMillis());
-			actualOrientation = calcThymioOrientation();
-			System.out.println("Rotation_state: "
-					+ Math.toDegrees(actualOrientation));
+			//actualOrientation = calcThymioOrientation();
+			//System.out.println("Rotation_state: "
+					//+ Math.toDegrees(actualOrientation));
 		}
 		thy.updatePose(System.currentTimeMillis());
 		thy.setVLeft((short) 0);
@@ -103,25 +185,18 @@ public class TurnToFixedOrientationThread extends Thread {
 		thy.isDriving = false;
 
 		thy.updatePose(System.currentTimeMillis());
-		actualOrientation = calcThymioOrientation();
+		//actualOrientation = calcThymioOrientation();
 
 		if (Vars.USE_ROT_CORRECTION)
 			if (didAnything) {
 				// doCorrectionIfNecessary();
 			}
 		
-		actualFixedOrientation = desiredOrientation;
-		System.out.println("actualFixedOriant: " + actualFixedOrientation);
+		Vars.actualFixedOrientation = desiredOrientation;
+		System.out.println("actualFixedOrient: " + Vars.actualFixedOrientation);
 	}
 
-	private int getTurnDirection() {
-		if (rotDirection == Vars.ROT_DIRECTION_TO_LEFT)
-			return 1;
-		else if (rotDirection == Vars.ROT_DIRECTION_TO_RIGHT)
-			return -1;
-
-		return 0;
-	}
+	
 
 	private boolean checkCondition(long startTime) {
 		/*
