@@ -35,6 +35,8 @@ public class Thymio {
 	public static final double SPEEDCOEFF = Vars.THYMIO_SPEED_COEF;
 	public static final double BASE_WIDTH = 95;
 	public static final int ODOM_THRESH = 30;
+	
+
 
 	public Thymio(MapPanel p) {
 		vleft = vright = 0;
@@ -46,7 +48,7 @@ public class Thymio {
 		myControlThread.setName("DrivingThread");
 		myControlThread.start();
 		lastTimeStamp = Long.MIN_VALUE;
-		actualField = Vars.START_FIELD_COLOR;
+//		actualField = Vars.START_FIELD_COLOR;
 		straightness = Vars.POSITION_OK;
 
 		setVLeft((short) 0);
@@ -227,6 +229,20 @@ public class Thymio {
 	public void stopMove() {
 		setVLeft((short) (leftMotorSpeed / 2));
 		setVRight((short) (rightMotorSpeed / 2));
+		setVRight((short) 0);
+		setVLeft((short) 0);
+	}
+	
+	public void stopMove(short actLeftMotSpeed, short actRightMotSpeed) {
+		setVLeft((short) (actLeftMotSpeed / 2));
+		setVRight((short) (actRightMotSpeed / 2));
+		setVRight((short) 0);
+		setVLeft((short) 0);
+	}
+	
+	public void stopMove(short actMotSpeed) {
+		setVLeft((short) (actMotSpeed / 2));
+		setVRight((short) (actMotSpeed / 2));
 		setVRight((short) 0);
 		setVLeft((short) 0);
 	}

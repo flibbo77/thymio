@@ -8,11 +8,14 @@ public class DriveNumOfFieldsThread extends Thread {
 	private int fieldCount;
 	private Thymio thy;
 
-	private int previousFieldNum = -1;
+	private int previousFieldColor = -1;
 
-	public DriveNumOfFieldsThread(int numOfFields, Thymio thy) {
+	public DriveNumOfFieldsThread(int numOfFields, Thymio thymio) {
 		this.numOfFields = numOfFields;
-		this.thy = thy;
+		thy = thymio;
+		thy.updatePose(System.currentTimeMillis());
+		previousFieldColor = thy.getActualField();
+		System.out.println("feld bei start: " + previousFieldColor);
 	}
 
 	public void run() {
@@ -27,7 +30,7 @@ public class DriveNumOfFieldsThread extends Thread {
 			} else if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_RIGHT) {
 				System.out.println("too far right");
 				correctDirection(Vars.CORR_LEFT);
-			}
+			} 
 
 			updateFieldCount();
 			System.out.println("Time for DriveLoop: "
@@ -39,35 +42,49 @@ public class DriveNumOfFieldsThread extends Thread {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
-		thy.stopMove();
+		thy.stopMove(Vars.DRIVE_SPEED);
 	}
 
 	private void correctDirection(int direction) {
-		short speed = Vars.CORRECTION_SPEED;
+		short speed = -Vars.CORRECTION_SPEED;
+		thy.stopMove(Vars.DRIVE_SPEED);
 		if (direction == Vars.CORR_LEFT){
-			speed *= -1;
+			//speed *= -1;
+			thy.setVLeft(speed);
+		}else if (direction == Vars.CORR_RIGHT){
+			thy.setVRight(speed);
 		}
 		
-		thy.stopMove();
-		thy.setVLeft((short) speed);
-		thy.setVRight((short) -speed);
+		
+		
 		long startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < Vars.CORRECTION_TIME){
 			//do nothing
 		}
-		thy.stopMove();
+		if (direction == Vars.CORR_LEFT){
+			//speed *= -1;
+			thy.setVLeft((short) 0);
+		}else if (direction == Vars.CORR_RIGHT){
+			thy.setVRight((short) 0);
+		}
+		thy.driveStraight((short) -Vars.DRIVE_SPEED);
+		startTime = System.currentTimeMillis();
+		while(System.currentTimeMillis() - startTime < Vars.DRIVE_BACKWARDS_TIME){
+			//do nothing
+		}
+		thy.stopMove((short) -Vars.DRIVE_SPEED);
 		thy.driveStraight(Vars.DRIVE_SPEED);
 		
 		
 	}
 
 	private void updateFieldCount() {
-		int currentField = thy.getActualField();
+		int currentFieldColor = thy.getActualField();
 
-		if (currentField != previousFieldNum) {
+		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
 		}
 
-		previousFieldNum = currentField;
+		previousFieldColor = currentFieldColor;
 	}
 }

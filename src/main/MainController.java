@@ -23,9 +23,14 @@ public class MainController extends JFrame {
 	private Thymio myThymio;
 	private MapPanel myPanel;
 	
-	//public static final int MAPSIZE_X =109;
-	//public static final int MAPSIZE_Y = 36;
-	//public static final double LENGTH = 3.5;
+
+	
+	//TODO check if detection of left or right border is possible
+	//TODO implement avoid collision method
+	//TODO check if higher speed are possible
+	//TODO check if start on black or white field works now
+	//TODO check if client could work more efficient
+	//TODO check if update Pose could work more efficient
 	
 	public MainController() {
 		super("Map");

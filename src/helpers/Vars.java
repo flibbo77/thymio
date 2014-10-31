@@ -11,8 +11,8 @@ public class Vars {
 	public static final int NEAST_SWEST = 6;
 	public static final int SWEST_NEAST = 7;
 
-	public static final int MAP_X = 9;//9
-	public static final int MAP_Y = 20;//20
+	public static final int MAP_X = 4;//9
+	public static final int MAP_Y = 8;//20
 	public static final double MAPFIELD_SIZE = 17;
 	public static final int NUM_BARRIERS = 4;
 	public static final boolean DRAW_FIELD_IDS = false;
@@ -31,7 +31,7 @@ public class Vars {
 	public static final int TOO_FAR_TURNED_TO_RIGHT = 2;
 	public static final int CORRECT_STRAIGHTNESS = 3;
 	
-	public static final int START_FIELD_COLOR = BLACK_FIELD;
+//	public static final int START_FIELD_COLOR = BLACK_FIELD;
 	
 	public static boolean rotate = false;
 	public static int actualRotDirection = 0;
@@ -41,8 +41,8 @@ public class Vars {
 												// mit Dikstra jede nötige
 												// Rotation mit einem Malus
 												// versieht
-	public static final short TURN_SPEED = 43;
-	public static final short CORRECTION_SPEED = 30;
+	public static final short TURN_SPEED = 55;
+	public static final short CORRECTION_SPEED = 35;
 	
 	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
 	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2600;
@@ -53,9 +53,11 @@ public class Vars {
 	public static final int CORR_RIGHT = -1;
 	public static final int CORR_LEFT = 1;
 	public static final int FRONT_SENSOR_SIGN_DIFF = 190;
-	public static final long CORRECTION_TIME = 500;
+	public static final long CORRECTION_TIME = 700;
 	public static final int COLLISION_SENSOR_VALUE = 1000;
 	public static final long TURN_TIME = 4000;
+	public static final long DRIVE_BACKWARDS_TIME = 500;
+	public static int actualFixedOrientation = 0;
 	
 
 	public static String toString(int var) {
