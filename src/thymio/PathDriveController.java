@@ -131,9 +131,9 @@ public class PathDriveController extends Thread {
 	private int getDirectionBetweenCoordinates(Coordinate lastCoord, Coordinate curCoord) {
 		int curDirection = 0;
 		if (lastCoord.getX() < curCoord.getX()) {
-			curDirection = Vars._270_DEGREES;
-		} else if (lastCoord.getX() > curCoord.getX()) {
 			curDirection = Vars._90_DEGREES;
+		} else if (lastCoord.getX() > curCoord.getX()) {
+			curDirection = Vars._270_DEGREES;
 		} else if (lastCoord.getY() < curCoord.getY()) {
 			curDirection = Vars._0_DEGREES;
 		} else if (lastCoord.getY() > curCoord.getY()) {

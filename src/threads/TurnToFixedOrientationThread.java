@@ -144,7 +144,7 @@ public class TurnToFixedOrientationThread extends Thread {
 		speed *= getTurnDirection();
 
 		thy.isDriving = true;
-		thy.updatePose(System.currentTimeMillis());
+//		thy.updatePose(System.currentTimeMillis());
 
 		rotate();
 
@@ -162,23 +162,23 @@ public class TurnToFixedOrientationThread extends Thread {
 	private void rotate() {
 		boolean didAnything = false;
 		Vars.rotate = true;
-		System.out.println("rotate, speed: " + speed);
 		long startTime = System.currentTimeMillis();
+		int colorBeforeTurn = thy.getActualField();
 		thy.setVLeft((short) -speed);
 		thy.setVRight(speed);
 
-		thy.updatePose(System.currentTimeMillis());
+//		thy.updatePose(System.currentTimeMillis());
 
 		//actualOrientation = calcThymioOrientation();
 
 		while (checkCondition(startTime)) {
 			didAnything = true;
-			thy.updatePose(System.currentTimeMillis());
+//			thy.updatePose(System.currentTimeMillis());
 			//actualOrientation = calcThymioOrientation();
 			//System.out.println("Rotation_state: "
 					//+ Math.toDegrees(actualOrientation));
 		}
-		thy.updatePose(System.currentTimeMillis());
+//		thy.updatePose(System.currentTimeMillis());
 		thy.setVLeft((short) 0);
 		thy.setVRight((short) 0);
 		Vars.rotate = false;
@@ -186,6 +186,15 @@ public class TurnToFixedOrientationThread extends Thread {
 
 		thy.updatePose(System.currentTimeMillis());
 		//actualOrientation = calcThymioOrientation();
+		
+		if(thy.getActualField() != colorBeforeTurn){
+			long startDriveBackTime = System.currentTimeMillis();
+			thy.driveStraight((short) -Vars.DRIVE_SPEED);
+			while(System.currentTimeMillis() - startDriveBackTime < Vars.CORRECTION_TIME){
+				//do nothing
+			}
+			thy.stopMove((short) -Vars.CORRECTION_SPEED);
+		}
 
 		if (Vars.USE_ROT_CORRECTION)
 			if (didAnything) {
@@ -231,13 +240,13 @@ public class TurnToFixedOrientationThread extends Thread {
 		return false;
 	}
 
-	private double calcThymioOrientation() {
+	/*private double calcThymioOrientation() {
 		double actOrientation = thy.myPanel.myMap.getThymioOrientation();
 		actOrientation %= 2 * Math.PI;
 		if (actOrientation < 0)
 			actOrientation = 2 * Math.PI + actOrientation;
 		return actOrientation;
-	}
+	}*/
 
 	/*
 	 * private void doCorrectionIfNecessary() { double failure =

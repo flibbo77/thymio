@@ -194,7 +194,7 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			}
 			break;
 		case KeyEvent.VK_Z:
-			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(1,
+			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(2,
 					myThymio);
 			myDriver.start();
 		default:
