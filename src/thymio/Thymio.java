@@ -139,14 +139,11 @@ public class Thymio {
 			checkActualFieldColor(proxGroundLeft, proxGroundRight);
 			checkStraightness(proxGroundLeft, proxGroundRight);
 			
-			/*sensorData = myClient.getVariable("prox.horizontal");
+			sensorData = myClient.getVariable("prox.horizontal");
 			proxSensors = new int[sensorData.size()];
 			for(int i = 0; i < sensorData.size(); i++){
 				proxSensors[i] = sensorData.get(i);
-			}*/
-			
-			//checkCollision();
-
+			}
 			
 
 			if (odomLeft == Short.MIN_VALUE || odomRight == Short.MIN_VALUE)
@@ -210,13 +207,16 @@ public class Thymio {
 			straightness = Vars.CORRECT_STRAIGHTNESS;
 	}
 	
-	private void checkCollision(){
+	public int checkCollision(){
 		for(int i = 0; i < proxSensors.length; i++){
 			if (proxSensors[i] > Vars.COLLISION_SENSOR_VALUE){
-				stopMove();
+				return i;
 			}
 		}
+		return -1;
 	}
+	
+	
 
 	public int getActualField() {
 		return actualField;

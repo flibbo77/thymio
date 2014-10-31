@@ -20,8 +20,8 @@ public class Vars {
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR_STRAIGHT = 6;
-	public static final short MOTOR_CORR_ROT = 0;
+	public static final short MOTOR_CORR_STRAIGHT = 6;  //6
+	public static final short MOTOR_CORR_ROT = 5;
 	
 	public static final int BLACK_FIELD = 0;
 	public static final int WHITE_FIELD = 1;
@@ -42,10 +42,10 @@ public class Vars {
 												// Rotation mit einem Malus
 												// versieht
 	public static final short TURN_SPEED = 55;
-	public static final short CORRECTION_SPEED = 35;
+	public static final short CORRECTION_SPEED = 42;
 	
-	public static final short DRIVE_SPEED = (short) (41 * THYMIO_SPEED_COEF);
-	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2600;
+	public static final short DRIVE_SPEED = (short) (42 * THYMIO_SPEED_COEF);
+	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2300;
 	public static final int ROT_DIRECTION_TO_RIGHT = 0;
 	public static final int ROT_DIRECTION_TO_LEFT = 1;
 	public static final int ROT_DIRECTION_NONE = 2;
@@ -54,9 +54,11 @@ public class Vars {
 	public static final int CORR_LEFT = 1;
 	public static final int FRONT_SENSOR_SIGN_DIFF = 190;
 	public static final long CORRECTION_TIME = 700;
-	public static final int COLLISION_SENSOR_VALUE = 1000;
+	public static final int COLLISION_SENSOR_VALUE = 2525;
 	public static final long TURN_TIME = 4000;
-	public static final long DRIVE_BACKWARDS_TIME = 500;
+	public static final long DRIVE_BACKWARDS_TIME = 400;
+	public static final long COLLISION_AVOIDANCE_TIME = 800;
+	public static final short COLLISION_AVOIDANCE_SPEED = 50;
 	public static int actualFixedOrientation = 0;
 	
 

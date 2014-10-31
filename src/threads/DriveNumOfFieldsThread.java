@@ -24,6 +24,8 @@ public class DriveNumOfFieldsThread extends Thread {
 		while (fieldCount < numOfFields) {
 			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
+			
+			doSensorCorrection();
 			if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_LEFT) {
 				System.out.println("too far left");
 				correctDirection(Vars.CORR_RIGHT);
@@ -43,6 +45,47 @@ public class DriveNumOfFieldsThread extends Thread {
 			e.printStackTrace();
 		}
 		thy.stopMove(Vars.DRIVE_SPEED);
+	}
+
+	@SuppressWarnings("null")
+	private void doSensorCorrection() {
+		int sensorId = thy.checkCollision();
+		if (sensorId != -1) {
+			
+			switch(sensorId) {
+			case 0: // left
+			case 1:
+				wallCollCorrection(true);
+				break;
+			case 2: // middle
+				break;
+			case 3:
+			case 4: // right
+				wallCollCorrection(false);
+				break;
+			}
+		}
+	}
+
+	private void wallCollCorrection(boolean wallIsLeft) {
+		thy.stopMove(Vars.DRIVE_SPEED);
+		long startTime = System.currentTimeMillis();
+
+		if (wallIsLeft) {
+			// drive a bit to the right
+			thy.setVRight((short) -Vars.CORRECTION_SPEED);
+		} else {
+			// drive a bit to the left
+			thy.setVLeft((short) -Vars.CORRECTION_SPEED);
+
+		}
+		
+		while(System.currentTimeMillis() - startTime < Vars.COLLISION_AVOIDANCE_TIME){
+			//do nothing
+			System.out.println("!!!!!!!!!");
+		}
+		thy.stopMove((short) -Vars.DRIVE_SPEED);
+		thy.driveStraight(Vars.DRIVE_SPEED);
 	}
 
 	private void correctDirection(int direction) {
