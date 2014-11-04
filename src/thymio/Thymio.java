@@ -50,6 +50,7 @@ public class Thymio {
 		lastTimeStamp = Long.MIN_VALUE;
 //		actualField = Vars.START_FIELD_COLOR;
 		straightness = Vars.POSITION_OK;
+		updatePose(System.currentTimeMillis());
 
 		setVLeft((short) 0);
 		setVRight((short) 0);
