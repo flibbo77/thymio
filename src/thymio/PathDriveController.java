@@ -26,6 +26,7 @@ public class PathDriveController extends Thread {
 	
 	ArrayList<Thread> m_driveThreads;
 	ArrayList<Thread> m_turnThreads;
+	private boolean m_bIsKilled;
 	
 	/**
 	 * Constructor of class PathDriveController
@@ -38,6 +39,8 @@ public class PathDriveController extends Thread {
 		
 		m_driveThreads = new ArrayList<Thread>();
 		m_turnThreads = new ArrayList<Thread>();
+		
+		m_bIsKilled = false;
 		
 		m_Thymio = thymio;
 	}
@@ -174,7 +177,7 @@ public class PathDriveController extends Thread {
 	}
 	
 	private void drivePath() throws InterruptedException {
-		for (int i = 0; i < m_navigationPoints.size(); i++) {
+		for (int i = 0; i < m_navigationPoints.size() && m_bIsKilled == true; i++) {
 			NavigationPoint curNaviPoint = m_navigationPoints.get(i);
 			
 			// Do Turn
@@ -192,6 +195,7 @@ public class PathDriveController extends Thread {
 			driveThread.start();
 			driveThread.join();
 		}
+		m_bIsKilled = false;
 	}
 
 	@Override
