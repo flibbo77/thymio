@@ -82,6 +82,7 @@ public class PathDriveController extends Thread {
 	}
 	
 	public void killAllThreads() {
+		m_bIsKilled = true;
 		for (int i = 0; i < m_driveThreads.size(); i++) {
 			m_driveThreads.get(i).interrupt();
 		}
