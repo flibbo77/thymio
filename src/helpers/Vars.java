@@ -20,7 +20,7 @@ public class Vars {
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR_STRAIGHT = 4;  //6
+	public static final short MOTOR_CORR_STRAIGHT = 6;  //6
 	public static final short MOTOR_CORR_ROT = 5;
 	
 	public static final int BLACK_FIELD = 0;
@@ -60,6 +60,7 @@ public class Vars {
 	public static final long COLLISION_AVOIDANCE_TIME = 800;
 	public static final short COLLISION_AVOIDANCE_SPEED = 50;
 	public static int actualFixedOrientation = 0;
+	public static final long TIME_ONE_FIELD = 3700;
 	
 
 	public static String toString(int var) {

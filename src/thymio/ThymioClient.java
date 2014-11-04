@@ -92,9 +92,9 @@ public class ThymioClient {
 			}
 
 			write(msg);
-//			msg = read();
-//			if (!msg.startsWith("ok:"))
-//				System.out.println(msg);
+			msg = read();
+			if (!msg.startsWith("ok:"))
+				System.out.println(msg);
 
 			conn.close();
 		} catch (IOException e) {

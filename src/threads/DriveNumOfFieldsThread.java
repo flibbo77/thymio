@@ -7,6 +7,7 @@ public class DriveNumOfFieldsThread extends Thread {
 	private int numOfFields;
 	private int fieldCount;
 	private Thymio thy;
+	private long newFieldStartTime;
 
 	private int previousFieldColor = -1;
 
@@ -24,7 +25,7 @@ public class DriveNumOfFieldsThread extends Thread {
 		while (fieldCount < numOfFields) {
 			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
-			
+
 			doSensorCorrection();
 			if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_LEFT) {
 				System.out.println("too far left");
@@ -32,7 +33,7 @@ public class DriveNumOfFieldsThread extends Thread {
 			} else if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_RIGHT) {
 				System.out.println("too far right");
 				correctDirection(Vars.CORR_LEFT);
-			} 
+			}
 
 			updateFieldCount();
 			System.out.println("Time for DriveLoop: "
@@ -51,8 +52,8 @@ public class DriveNumOfFieldsThread extends Thread {
 	private void doSensorCorrection() {
 		int sensorId = thy.checkCollision();
 		if (sensorId != -1) {
-			
-			switch(sensorId) {
+
+			switch (sensorId) {
 			case 0: // left
 			case 1:
 				wallCollCorrection(true);
@@ -79,10 +80,9 @@ public class DriveNumOfFieldsThread extends Thread {
 			thy.setVLeft((short) -Vars.CORRECTION_SPEED);
 
 		}
-		
-		while(System.currentTimeMillis() - startTime < Vars.COLLISION_AVOIDANCE_TIME){
-			//do nothing
-			System.out.println("!!!!!!!!!");
+
+		while (System.currentTimeMillis() - startTime < Vars.COLLISION_AVOIDANCE_TIME) {
+			// do nothing
 		}
 		thy.stopMove((short) -Vars.DRIVE_SPEED);
 		thy.driveStraight(Vars.DRIVE_SPEED);
@@ -90,35 +90,35 @@ public class DriveNumOfFieldsThread extends Thread {
 
 	private void correctDirection(int direction) {
 		short speed = -Vars.CORRECTION_SPEED;
+		if(System.currentTimeMillis() - newFieldStartTime < Vars.TIME_ONE_FIELD){
+			speed = (short) (-speed * 5);
+		}
 		thy.stopMove(Vars.DRIVE_SPEED);
-		if (direction == Vars.CORR_LEFT){
-			//speed *= -1;
+		if (direction == Vars.CORR_LEFT) {
+			// speed *= -1;
 			thy.setVLeft(speed);
-		}else if (direction == Vars.CORR_RIGHT){
+		} else if (direction == Vars.CORR_RIGHT) {
 			thy.setVRight(speed);
 		}
-		
-		
-		
+
 		long startTime = System.currentTimeMillis();
-		while(System.currentTimeMillis() - startTime < Vars.CORRECTION_TIME){
-			//do nothing
+		while (System.currentTimeMillis() - startTime < Vars.CORRECTION_TIME) {
+			// do nothing
 		}
-		if (direction == Vars.CORR_LEFT){
-			//speed *= -1;
+		if (direction == Vars.CORR_LEFT) {
+			// speed *= -1;
 			thy.setVLeft((short) 0);
-		}else if (direction == Vars.CORR_RIGHT){
+		} else if (direction == Vars.CORR_RIGHT) {
 			thy.setVRight((short) 0);
 		}
 		thy.driveStraight((short) -Vars.DRIVE_SPEED);
 		startTime = System.currentTimeMillis();
-		while(System.currentTimeMillis() - startTime < Vars.DRIVE_BACKWARDS_TIME){
-			//do nothing
+		while (System.currentTimeMillis() - startTime < Vars.DRIVE_BACKWARDS_TIME) {
+			// do nothing
 		}
 		thy.stopMove((short) -Vars.DRIVE_SPEED);
 		thy.driveStraight(Vars.DRIVE_SPEED);
-		
-		
+
 	}
 
 	private void updateFieldCount() {
@@ -126,6 +126,7 @@ public class DriveNumOfFieldsThread extends Thread {
 
 		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
+			newFieldStartTime = System.currentTimeMillis();
 		}
 
 		previousFieldColor = currentFieldColor;
