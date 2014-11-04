@@ -24,6 +24,9 @@ public class PathDriveController extends Thread {
 	
 	ArrayList<NavigationPoint> m_navigationPoints;
 	
+	ArrayList<Thread> m_driveThreads;
+	ArrayList<Thread> m_turnThreads;
+	
 	/**
 	 * Constructor of class PathDriveController
 	 * @param thymio Thymio reference
@@ -32,6 +35,9 @@ public class PathDriveController extends Thread {
 		m_calculatedPath = null;
 		m_bIsInitialized = false;
 		m_bIsAnalyzed = false;
+		
+		m_driveThreads = new ArrayList<Thread>();
+		m_turnThreads = new ArrayList<Thread>();
 		
 		m_Thymio = thymio;
 	}
@@ -69,6 +75,17 @@ public class PathDriveController extends Thread {
 		for (int i = 0; i < m_navigationPoints.size(); i++) {
 			NavigationPoint np = m_navigationPoints.get(i);
 			System.out.println("Nav-Point " + i + " Direction: " + getDegreesForPreset(np.m_turnDirection) + " - Length: " + np.m_fieldsToDrive);
+		}
+	}
+	
+	public void killAllThreads() {
+		for (int i = 0; i < m_driveThreads.size(); i++) {
+			m_driveThreads.get(i).interrupt();
+		}
+		
+		for (int i = 0; i < m_turnThreads.size(); i++) {
+			// This will not work, because the interupted check isn't implemented in TurnToFixedOrientationThread.
+			//m_turnThreads.get(i).interrupt();
 		}
 	}
 	
@@ -164,12 +181,14 @@ public class PathDriveController extends Thread {
 			int turnDirection = getDegreesForPreset(curNaviPoint.m_turnDirection);
 			TurnToFixedOrientationThread turnThread = new TurnToFixedOrientationThread(turnDirection, m_Thymio);
 			turnThread.setName("NavThread:Turn: + " + i);
+			m_turnThreads.add(turnThread);
 			turnThread.start();
 			turnThread.join();
 			
 			// Drive Fields
 			DriveNumOfFieldsThread driveThread = new DriveNumOfFieldsThread(curNaviPoint.m_fieldsToDrive, m_Thymio);
 			driveThread.setName("NavThread:Drive: + " + i);
+			m_driveThreads.add(driveThread);
 			driveThread.start();
 			driveThread.join();
 		}

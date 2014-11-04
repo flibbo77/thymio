@@ -21,7 +21,7 @@ public class DriveNumOfFieldsThread extends Thread {
 	public void run() {
 		fieldCount = 0;
 		thy.driveStraight(Vars.DRIVE_SPEED);
-		while (fieldCount < numOfFields) {
+		while ((fieldCount < numOfFields) && !isInterrupted()) {
 			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
 			
@@ -38,11 +38,14 @@ public class DriveNumOfFieldsThread extends Thread {
 			System.out.println("Time for DriveLoop: "
 					+ (System.currentTimeMillis() - startLoop));
 		}
-		try {
-			Thread.sleep(Vars.GET_TO_CENTER_OF_MAP_ELEMENT_DELAY);
-		} catch (InterruptedException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		
+		if (isInterrupted()) {
+			try {
+				Thread.sleep(Vars.GET_TO_CENTER_OF_MAP_ELEMENT_DELAY);
+			} catch (InterruptedException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		thy.stopMove(Vars.DRIVE_SPEED);
 	}
