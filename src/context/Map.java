@@ -205,10 +205,10 @@ public class Map {
 				occupiedElements.add(pos);
 		}
 		
-		occupiedElements.set(0, 3);
-		occupiedElements.set(1, 5);
-		occupiedElements.set(2, 8);
-		occupiedElements.set(3, 12);
+//		occupiedElements.set(0, 3);
+//		occupiedElements.set(1, 5);
+//		occupiedElements.set(2, 8);
+//		occupiedElements.set(3, 12);
 
 		// find MapElement corresponding to each of the numbers and set its
 		// state to occupied
