@@ -19,7 +19,7 @@ public class DriveNumOfFieldsThread extends Thread {
 		this.thy = thymio;
 		this.thy.updatePose(System.currentTimeMillis());
 		this.previousFieldColor = thy.getActualField();
-		newFieldTimer = System.currentTimeMillis();
+//		newFieldTimer = System.currentTimeMillis();
 		System.out.println("feld bei start: " + previousFieldColor);
 	}
 	
