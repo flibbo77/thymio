@@ -156,6 +156,9 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			vForward.setValue(vForward.getValue() - 5);
 			break;
 		case KeyEvent.VK_SPACE:
+			if (m_pdc != null) {
+				m_pdc.killAllThreads();
+			}
 			myThymio.stopMove();
 			vForward.setValue(0);
 			theta.setValue(0);
