@@ -8,14 +8,21 @@ public class DriveNumOfFieldsThread extends Thread {
 	private int fieldCount;
 	private Thymio thy;
 
+	private FieldDrivenListener m_fieldDrivenListener;
+	
 	private int previousFieldColor = -1;
 
 	public DriveNumOfFieldsThread(int numOfFields, Thymio thymio) {
 		this.numOfFields = numOfFields;
-		thy = thymio;
-		thy.updatePose(System.currentTimeMillis());
-		previousFieldColor = thy.getActualField();
+		this.m_fieldDrivenListener = null;
+		this.thy = thymio;
+		this.thy.updatePose(System.currentTimeMillis());
+		this.previousFieldColor = thy.getActualField();
 		System.out.println("feld bei start: " + previousFieldColor);
+	}
+	
+	public void setFieldDrivenListener(FieldDrivenListener m_fdl) {
+		m_fdl = m_fieldDrivenListener;
 	}
 
 	public void run() {
@@ -39,7 +46,7 @@ public class DriveNumOfFieldsThread extends Thread {
 					+ (System.currentTimeMillis() - startLoop));
 		}
 		
-		if (isInterrupted()) {
+		if (!isInterrupted()) {
 			try {
 				Thread.sleep(Vars.GET_TO_CENTER_OF_MAP_ELEMENT_DELAY);
 			} catch (InterruptedException e) {
@@ -123,12 +130,20 @@ public class DriveNumOfFieldsThread extends Thread {
 		
 		
 	}
+	
+	public interface FieldDrivenListener {
+		public void thymioDroveField();
+	}
 
 	private void updateFieldCount() {
 		int currentFieldColor = thy.getActualField();
 
 		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
+			
+			if (m_fieldDrivenListener != null) {
+				m_fieldDrivenListener.thymioDroveField();
+			}
 		}
 
 		previousFieldColor = currentFieldColor;

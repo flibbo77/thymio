@@ -9,7 +9,7 @@ import threads.TurnToFixedOrientationThread;
 import context.Coordinate;
 import context.Path;
 
-public class PathDriveController extends Thread {
+public class PathDriveController extends Thread implements DriveNumOfFieldsThread.FieldDrivenListener{
 	
 	/** Path found by Dijkstra-Algorithm */
 	Path m_calculatedPath;
@@ -192,6 +192,7 @@ public class PathDriveController extends Thread {
 			// Drive Fields
 			DriveNumOfFieldsThread driveThread = new DriveNumOfFieldsThread(curNaviPoint.m_fieldsToDrive, m_Thymio);
 			driveThread.setName("NavThread:Drive: + " + i);
+			driveThread.setFieldDrivenListener(this);
 			m_driveThreads.add(driveThread);
 			driveThread.start();
 			driveThread.join();
@@ -222,5 +223,11 @@ public class PathDriveController extends Thread {
 				e.printStackTrace();
 			}
 		}
+	}
+
+	@Override
+	public void thymioDroveField() {
+		// TODO Auto-generated method stub
+		
 	}
 }
