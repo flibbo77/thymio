@@ -11,6 +11,7 @@ public class DriveNumOfFieldsThread extends Thread {
 	private FieldDrivenListener m_fieldDrivenListener;
 	
 	private int previousFieldColor = -1;
+	private long newFieldTimer;
 
 	public DriveNumOfFieldsThread(int numOfFields, Thymio thymio) {
 		this.numOfFields = numOfFields;
@@ -18,6 +19,7 @@ public class DriveNumOfFieldsThread extends Thread {
 		this.thy = thymio;
 		this.thy.updatePose(System.currentTimeMillis());
 		this.previousFieldColor = thy.getActualField();
+		newFieldTimer = System.currentTimeMillis();
 		System.out.println("feld bei start: " + previousFieldColor);
 	}
 	
@@ -92,7 +94,6 @@ public class DriveNumOfFieldsThread extends Thread {
 		
 		while(System.currentTimeMillis() - startTime < Vars.COLLISION_AVOIDANCE_TIME){
 			//do nothing
-			System.out.println("!!!!!!!!!");
 		}
 		thy.stopMove((short) -Vars.DRIVE_SPEED);
 		thy.driveStraight(Vars.DRIVE_SPEED);
@@ -100,6 +101,9 @@ public class DriveNumOfFieldsThread extends Thread {
 
 	private void correctDirection(int direction) {
 		short speed = -Vars.CORRECTION_SPEED;
+		if(System.currentTimeMillis() - newFieldTimer < Vars.TIME_ONE_FIELD){
+			speed = (short)(-speed * 4);
+		}
 		thy.stopMove(Vars.DRIVE_SPEED);
 		if (direction == Vars.CORR_LEFT){
 			//speed *= -1;
@@ -140,6 +144,7 @@ public class DriveNumOfFieldsThread extends Thread {
 
 		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
+			newFieldTimer = System.currentTimeMillis();
 			
 			if (m_fieldDrivenListener != null) {
 				m_fieldDrivenListener.thymioDroveField();

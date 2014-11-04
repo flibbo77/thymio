@@ -20,7 +20,7 @@ public class Vars {
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR_STRAIGHT = 6;  //6
+	public static final short MOTOR_CORR_STRAIGHT = 5;  //6
 	public static final short MOTOR_CORR_ROT = 5;
 	
 	public static final int BLACK_FIELD = 0;
