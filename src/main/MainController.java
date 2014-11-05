@@ -40,6 +40,7 @@ public class MainController extends JFrame {
 		myThymio = new Thymio(myPanel);
 		
 		PathDriveController pathDriver = new PathDriveController(myThymio);
+		pathDriver.setMapPanel(myPanel);
 		pathDriver.setCalculatedPath(myMap.getCalculatedPath());
 		
 
