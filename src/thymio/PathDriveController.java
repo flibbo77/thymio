@@ -40,9 +40,10 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		m_driveThreads = new ArrayList<Thread>();
 		m_turnThreads = new ArrayList<Thread>();
 		
-		m_bIsKilled = false;
+		m_bIsKilled = true;//false
 		
 		m_Thymio = thymio;
+		System.out.println("path thread initialized");
 	}
 	
 	/**
@@ -178,7 +179,9 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	}
 	
 	private void drivePath() throws InterruptedException {
+		System.out.println("navPointsLength: " + m_navigationPoints.size());
 		for (int i = 0; i < m_navigationPoints.size() && m_bIsKilled == true; i++) {
+			System.out.println(i);
 			NavigationPoint curNaviPoint = m_navigationPoints.get(i);
 			
 			// Do Turn
@@ -205,6 +208,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		waitForInitialization();
 		
 		try {
+			System.out.println("start drive");
 			drivePath();
 		} catch (InterruptedException e) {
 			// TODO Auto-generated catch block
@@ -218,6 +222,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	private void waitForInitialization() {
 		while (!m_bIsAnalyzed || !m_bIsInitialized || m_Thymio == null) {
 			try {
+				System.out.println("wait");
 				wait(1000);
 			} catch (InterruptedException e) {
 				e.printStackTrace();

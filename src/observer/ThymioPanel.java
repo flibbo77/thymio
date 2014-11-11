@@ -193,6 +193,7 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			break;
 		case KeyEvent.VK_5:
 			if (m_pdc != null) {
+				System.out.println("startPath");
 				m_pdc.start();
 			}
 			break;
@@ -200,6 +201,11 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 			DriveNumOfFieldsThread myDriver = new DriveNumOfFieldsThread(2,
 					myThymio);
 			myDriver.start();
+			break;
+		
+		case KeyEvent.VK_B:
+			System.out.println("\007");
+			break;
 		default:
 			break;
 		}

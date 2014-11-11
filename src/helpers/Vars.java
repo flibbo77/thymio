@@ -45,7 +45,7 @@ public class Vars {
 	public static final short CORRECTION_SPEED = 42;
 	
 	public static final short DRIVE_SPEED = (short) (42 * THYMIO_SPEED_COEF);
-	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2300;
+	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2400;
 	public static final int ROT_DIRECTION_TO_RIGHT = 0;
 	public static final int ROT_DIRECTION_TO_LEFT = 1;
 	public static final int ROT_DIRECTION_NONE = 2;
@@ -60,7 +60,7 @@ public class Vars {
 	public static final long COLLISION_AVOIDANCE_TIME = 800;
 	public static final short COLLISION_AVOIDANCE_SPEED = 50;
 	public static int actualFixedOrientation = 0;
-	public static final long TIME_ONE_FIELD = 3700;
+	public static final long TIME_ONE_FIELD = 4500;
 	
 
 	public static String toString(int var) {

@@ -145,6 +145,7 @@ public class DriveNumOfFieldsThread extends Thread {
 		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
 			newFieldTimer = System.currentTimeMillis();
+			System.out.println((char)7);
 			
 			if (m_fieldDrivenListener != null) {
 				m_fieldDrivenListener.thymioDroveField();
