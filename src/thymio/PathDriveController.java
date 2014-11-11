@@ -4,6 +4,7 @@ import helpers.Vars;
 
 import java.util.ArrayList;
 
+import observer.MapPanel;
 import threads.DriveNumOfFieldsThread;
 import threads.TurnToFixedOrientationThread;
 import context.Coordinate;
@@ -28,6 +29,8 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	ArrayList<Thread> m_turnThreads;
 	private boolean m_bIsKilled;
 	
+	private MapPanel m_MapPanel;
+	
 	/**
 	 * Constructor of class PathDriveController
 	 * @param thymio Thymio reference
@@ -36,7 +39,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		m_calculatedPath = null;
 		m_bIsInitialized = false;
 		m_bIsAnalyzed = false;
-		
+		m_MapPanel = null;
 		m_driveThreads = new ArrayList<Thread>();
 		m_turnThreads = new ArrayList<Thread>();
 		
@@ -59,6 +62,10 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 			analyzePath();
 			printNavigationPoints();
 		}
+	}
+	
+	public void setMapPanel(MapPanel mp) {
+		m_MapPanel = mp;
 	}
 	
 	/**
@@ -230,9 +237,15 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		}
 	}
 
+	private int m_iPosChanges = 0;
 	@Override
 	public void thymioDroveField() {
-		// TODO Auto-generated method stub
+		m_iPosChanges ++;
 		
+		if (m_MapPanel == null) {
+			return;
+		}
+		
+		m_MapPanel.setNewThymioPosition(m_iPosChanges, m_calculatedPath);
 	}
 }

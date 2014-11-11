@@ -12,6 +12,7 @@ import javax.swing.JPanel;
 
 import context.Map;
 import context.MapElement;
+import context.Path;
 
 public class MapPanel extends JPanel {
 	/**
@@ -22,8 +23,12 @@ public class MapPanel extends JPanel {
 	public static final int LENGTHSCALE = 30;
 	public static final double LENGTH_EDGE_CM = 3.5;
 	
+	private int[] m_ThymioPos;
+	
 	public MapPanel(Map m, JFrame f) {
 		myMap = m;
+		m_ThymioPos = new int[2];
+		m_ThymioPos[0] = 0; m_ThymioPos[1] = 0;
 		
 		this.setPreferredSize(new Dimension(myMap.getSizeX()*LENGTHSCALE, myMap.getSizeY()*LENGTHSCALE));
 		this.setMaximumSize(new Dimension(myMap.getSizeX()*LENGTHSCALE, myMap.getSizeY()*LENGTHSCALE));
@@ -37,6 +42,12 @@ public class MapPanel extends JPanel {
 	
 	public void updatePose(double dF, double dR, double dt) {
 		myMap.updatePose(dF, dR, dt);
+		this.repaint();
+	}
+	
+	public void setNewThymioPosition(int posChanges, Path path) {
+		m_ThymioPos[0] = path.get(posChanges).getX();
+		m_ThymioPos[1] = path.get(posChanges).getY();
 		this.repaint();
 	}
 	
@@ -93,17 +104,25 @@ public class MapPanel extends JPanel {
 					g.fillRect(LENGTHSCALE * x, LENGTHSCALE * y, LENGTHSCALE, LENGTHSCALE);
 				}
 				
+				// Draw Thymio
+				if (x == m_ThymioPos[0] && y == m_ThymioPos[1]) {
+					g.setColor(Color.RED);
+					g.fillRect(LENGTHSCALE * x + LENGTHSCALE/2 - LENGTHSCALE/4, LENGTHSCALE * y + LENGTHSCALE/2 - LENGTHSCALE/4, LENGTHSCALE/2, LENGTHSCALE/2);
+				}
+				
 				// Draw Path
 				if (curElement.isOnPath()) {
 					g.setColor(Color.BLACK);
 					g.fillRect(LENGTHSCALE * x + LENGTHSCALE/2 - LENGTHSCALE/8, LENGTHSCALE * y + LENGTHSCALE/2  - LENGTHSCALE/8, LENGTHSCALE/4, LENGTHSCALE/4);
 				}
 				
+				// Draw field Ids (standard: deactivated)
 				if (Vars.DRAW_FIELD_IDS) {
 					g.setColor(Color.BLACK);
 					g.setFont(new Font("TimesRoman", Font.PLAIN, 8));
 					g.drawString("("+x+","+y+")", LENGTHSCALE * x + LENGTHSCALE/10, LENGTHSCALE * y + LENGTHSCALE/5);
 				}
+				
 				/*
 				if (x == myMap.getThymioX() && y == myMap.getThymioY()) {
 					int [] rotX = new int[3];
