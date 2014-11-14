@@ -82,6 +82,9 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		}
 	}
 	
+	/**
+	 * This method will print all NavigationPoints to the System console
+	 */
 	private void printNavigationPoints() {
 		for (int i = 0; i < m_navigationPoints.size(); i++) {
 			NavigationPoint np = m_navigationPoints.get(i);
@@ -185,6 +188,11 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		return 0;
 	}
 	
+	/**
+	 * For every NavigationPoint this Method will start a TurnThread, wait for its completion
+	 * and then start a DriveFieldsThread.
+	 * @throws InterruptedException
+	 */
 	private void drivePath() throws InterruptedException {
 		System.out.println("navPointsLength: " + m_navigationPoints.size());
 		for (int i = 0; i < m_navigationPoints.size() && m_bIsKilled == true; i++) {

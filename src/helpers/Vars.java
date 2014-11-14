@@ -60,7 +60,7 @@ public class Vars {
 	public static final long COLLISION_AVOIDANCE_TIME = 800;
 	public static final short COLLISION_AVOIDANCE_SPEED = 50;
 	public static int actualFixedOrientation = 0;
-	public static final long TIME_ONE_FIELD = 4500;
+	public static final long TIME_ONE_FIELD = 88500;
 	
 
 	public static String toString(int var) {

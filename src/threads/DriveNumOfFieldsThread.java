@@ -28,22 +28,28 @@ public class DriveNumOfFieldsThread extends Thread {
 	}
 
 	public void run() {
-		fieldCount = 0;
+		fieldCount = -1;
+		newFieldTimer = System.currentTimeMillis();
 		thy.driveStraight(Vars.DRIVE_SPEED);
 		while ((fieldCount < numOfFields) && !isInterrupted()) {
 			long startLoop = System.currentTimeMillis();
 			thy.updatePose(System.currentTimeMillis());
 			
 			doSensorCorrection();
+			
+			updateFieldCount();
+			
 			if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_LEFT) {
 				System.out.println("too far left");
 				correctDirection(Vars.CORR_RIGHT);
 			} else if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_RIGHT) {
 				System.out.println("too far right");
 				correctDirection(Vars.CORR_LEFT);
-			} 
+			}
+			
+			//doFieldCheckCorrection();
 
-			updateFieldCount();
+			
 			System.out.println("Time for DriveLoop: "
 					+ (System.currentTimeMillis() - startLoop));
 		}
@@ -59,7 +65,45 @@ public class DriveNumOfFieldsThread extends Thread {
 		thy.stopMove(Vars.DRIVE_SPEED);
 	}
 
-	@SuppressWarnings("null")
+	
+	/**
+	 * T
+	 */
+	private void doFieldCheckCorrection() {
+		// Get direction to correct first
+		int direction = 0;
+		if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_LEFT) {
+			direction = Vars.CORR_RIGHT;
+		} else if (thy.getStraightness() == Vars.TOO_FAR_TURNED_TO_RIGHT) {
+			direction = Vars.CORR_LEFT;
+		} else {
+			return;
+		}
+		
+		long timeDifOfFieldChange = System.currentTimeMillis() - newFieldTimer;
+		final short CORRECTION_VALUE = 55;
+		
+		if (timeDifOfFieldChange <= 270) {
+			thy.stopMove(Vars.DRIVE_SPEED);
+			if (direction == Vars.CORR_RIGHT) {
+				thy.setVRight((short) -CORRECTION_VALUE);
+			} else if (direction == Vars.CORR_LEFT) {
+				thy.setVLeft((short) -CORRECTION_VALUE);
+			}
+			long time = System.currentTimeMillis();
+			while (System.currentTimeMillis() - time < 600) {
+				// nix
+			}
+			thy.stopMove();
+			thy.driveStraight(Vars.DRIVE_SPEED);
+		}
+	}
+
+	/**
+	 * This method checks wether thymio is very close to wall.
+	 * This will be detected by the 2 left and the 2 right sensors. Middle one is ignored.
+	 * If thymio is too close, it starts a correction.
+	 */
 	private void doSensorCorrection() {
 		int sensorId = thy.checkCollision();
 		if (sensorId != -1) {
@@ -79,6 +123,12 @@ public class DriveNumOfFieldsThread extends Thread {
 		}
 	}
 
+	/**
+	 * This method gets called by doSensorCorrection. It will stop the motor. Depending on
+	 * the paramter it will start the left or right motor to correct for 0,8sec.
+	 * After that driving start will be started again.
+	 * @param wallIsLeft true when he has to correct to the right hand side, else false
+	 */
 	private void wallCollCorrection(boolean wallIsLeft) {
 		thy.stopMove(Vars.DRIVE_SPEED);
 		long startTime = System.currentTimeMillis();
@@ -101,10 +151,13 @@ public class DriveNumOfFieldsThread extends Thread {
 
 	private void correctDirection(int direction) {
 		short speed = -Vars.CORRECTION_SPEED;
-		if(System.currentTimeMillis() - newFieldTimer < Vars.TIME_ONE_FIELD){
+		
+		if(System.currentTimeMillis() - newFieldTimer > Vars.TIME_ONE_FIELD){
 			speed = (short)(-speed * 4);
 		}
+		
 		thy.stopMove(Vars.DRIVE_SPEED);
+		
 		if (direction == Vars.CORR_LEFT){
 			//speed *= -1;
 			thy.setVLeft(speed);
@@ -118,17 +171,22 @@ public class DriveNumOfFieldsThread extends Thread {
 		while(System.currentTimeMillis() - startTime < Vars.CORRECTION_TIME){
 			//do nothing
 		}
+		
+		
 		if (direction == Vars.CORR_LEFT){
 			//speed *= -1;
 			thy.setVLeft((short) 0);
 		}else if (direction == Vars.CORR_RIGHT){
 			thy.setVRight((short) 0);
 		}
+		
 		thy.driveStraight((short) -Vars.DRIVE_SPEED);
+		
 		startTime = System.currentTimeMillis();
 		while(System.currentTimeMillis() - startTime < Vars.DRIVE_BACKWARDS_TIME){
 			//do nothing
 		}
+		
 		thy.stopMove((short) -Vars.DRIVE_SPEED);
 		thy.driveStraight(Vars.DRIVE_SPEED);
 		
@@ -139,13 +197,18 @@ public class DriveNumOfFieldsThread extends Thread {
 		public void thymioDroveField();
 	}
 
+	/**
+	 * This method gets called by the run method all time.
+	 * It checks if the current field color differs from the old one. If so thymio has one field less to drive.
+	 * 
+	 * Furthermore it will notify a Listener (FieldDrivenListener) that a field was driven (if one is set)
+	 */
 	private void updateFieldCount() {
 		int currentFieldColor = thy.getActualField();
 
 		if (currentFieldColor != previousFieldColor) {
 			++fieldCount;
 			newFieldTimer = System.currentTimeMillis();
-			System.out.println((char)7);
 			
 			if (m_fieldDrivenListener != null) {
 				m_fieldDrivenListener.thymioDroveField();
