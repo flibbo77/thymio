@@ -27,7 +27,7 @@ public class Dikstra {
 		goal = to;
 
 		start.distance = 0;
-		
+
 		dijkstra();
 		System.out.println("goal: " + goal.getPosX() + "\t" + goal.getPosY());
 		System.out.println("Gesamtstrecke: " + goal.distance);
@@ -63,7 +63,7 @@ public class Dikstra {
 			v.setPreviousEdge();
 			for (int i = 0; i < v.edges.size(); i++) {
 				MapElement next = v.edges.get(i).link;
-				
+
 				// Aufschlag für Ausführen von Rotation
 				double rotationMalus = 0;
 				if (v.getPreviousEdge() != null)

@@ -11,8 +11,8 @@ public class Vars {
 	public static final int NEAST_SWEST = 6;
 	public static final int SWEST_NEAST = 7;
 
-	public static final int MAP_X = 9;//9
-	public static final int MAP_Y = 20;//20
+	public static final int MAP_X = 9;// 9
+	public static final int MAP_Y = 20;// 20
 	public static final double MAPFIELD_SIZE = 17;
 	public static final int NUM_BARRIERS = 10;
 	public static final boolean DRAW_FIELD_IDS = false;
@@ -20,30 +20,29 @@ public class Vars {
 
 	public static final double THYMIO_SPEED_COEF = 3.73;
 	public static final double THYMIO_BASEWIDTH = 95;
-	public static final short MOTOR_CORR_STRAIGHT = 5;  //6
+	public static final short MOTOR_CORR_STRAIGHT = 5; // 6
 	public static final short MOTOR_CORR_ROT = 5;
-	
+
 	public static final int BLACK_FIELD = 0;
 	public static final int WHITE_FIELD = 1;
-	
+
 	public static final int POSITION_OK = 0;
 	public static final int TOO_FAR_TURNED_TO_LEFT = 1;
 	public static final int TOO_FAR_TURNED_TO_RIGHT = 2;
 	public static final int CORRECT_STRAIGHTNESS = 3;
-	
-//	public static final int START_FIELD_COLOR = BLACK_FIELD;
-	
+
 	public static boolean rotate = false;
 	public static int actualRotDirection = 0;
-	
 
-	public static final double ROT_MALUS = 3; // Wert, der in der Routenplanung
-												// mit Dikstra jede nötige
-												// Rotation mit einem Malus
-												// versieht
+	/**
+	 * Wert, der in der Routenplanung mit Dikstra jede nötige Rotation mit einem
+	 * Malus versieht
+	 */
+	public static final double ROT_MALUS = 2;
+
 	public static final short TURN_SPEED = 55;
 	public static final short CORRECTION_SPEED = 42;
-	
+
 	public static final short DRIVE_SPEED = (short) (42 * THYMIO_SPEED_COEF);
 	public static final long GET_TO_CENTER_OF_MAP_ELEMENT_DELAY = 2400;
 	public static final int ROT_DIRECTION_TO_RIGHT = 0;
@@ -60,8 +59,7 @@ public class Vars {
 	public static final long COLLISION_AVOIDANCE_TIME = 800;
 	public static final short COLLISION_AVOIDANCE_SPEED = 50;
 	public static int actualFixedOrientation = 0;
-	public static final long TIME_ONE_FIELD = 88500;
-	
+	public static final long TIME_ONE_FIELD = 2800;
 
 	public static String toString(int var) {
 		switch (var) {

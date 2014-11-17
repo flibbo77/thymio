@@ -15,7 +15,6 @@ public class Thymio {
 	private short vleft;
 	private short vright;
 	public ThymioInterface myInterface;
-	private ThymioDrivingThread myControlThread;
 	private ThymioClient myClient;
 	private long lastTimeStamp;
 	public MapPanel myPanel;
@@ -44,9 +43,6 @@ public class Thymio {
 		myPanel = p;
 		myClient = new ThymioClient();
 		myInterface = new ThymioInterface(this);
-		myControlThread = new ThymioDrivingThread(this);
-		myControlThread.setName("DrivingThread");
-		myControlThread.start();
 		lastTimeStamp = Long.MIN_VALUE;
 		// actualField = Vars.START_FIELD_COLOR;
 		straightness = Vars.POSITION_OK;
@@ -195,8 +191,7 @@ public class Thymio {
 
 	private void checkStraightness(int proxGroundLeft, int proxGroundRight) {
 		straightness = Vars.CORRECT_STRAIGHTNESS;
-		System.out.println("left sensor: " + proxGroundLeft + " right sensor: "
-				+ proxGroundRight);
+
 		if (actualField == Vars.WHITE_FIELD
 				&& proxGroundLeft - proxGroundRight > Vars.FRONT_SENSOR_SIGN_DIFF)
 			straightness = Vars.TOO_FAR_TURNED_TO_LEFT;
@@ -245,10 +240,7 @@ public class Thymio {
 	}
 
 	public void stopMove(short actMotSpeed) {
-		setVLeft((short) (actMotSpeed / 2));
-		setVRight((short) (actMotSpeed / 2));
-		setVRight((short) 0);
-		setVLeft((short) 0);
+		stopMove(actMotSpeed, actMotSpeed);
 	}
 
 	public void driveStraight(short driveSpeed) {

@@ -27,7 +27,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	
 	ArrayList<Thread> m_driveThreads;
 	ArrayList<Thread> m_turnThreads;
-	private boolean m_bIsKilled;
+	private boolean m_bGotKilled;
 	
 	private MapPanel m_MapPanel;
 	
@@ -43,7 +43,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 		m_driveThreads = new ArrayList<Thread>();
 		m_turnThreads = new ArrayList<Thread>();
 		
-		m_bIsKilled = true;//false
+		m_bGotKilled = false;
 		
 		m_Thymio = thymio;
 		System.out.println("path thread initialized");
@@ -93,7 +93,7 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	}
 	
 	public void killAllThreads() {
-		m_bIsKilled = true;
+		m_bGotKilled = true;
 		for (int i = 0; i < m_driveThreads.size(); i++) {
 			m_driveThreads.get(i).interrupt();
 		}
@@ -195,27 +195,27 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	 */
 	private void drivePath() throws InterruptedException {
 		System.out.println("navPointsLength: " + m_navigationPoints.size());
-		for (int i = 0; i < m_navigationPoints.size() && m_bIsKilled == true; i++) {
+		for (int i = 0; i < m_navigationPoints.size() && m_bGotKilled == false; i++) {
 			System.out.println(i);
 			NavigationPoint curNaviPoint = m_navigationPoints.get(i);
 			
 			// Do Turn
 			int turnDirection = getDegreesForPreset(curNaviPoint.m_turnDirection);
 			TurnToFixedOrientationThread turnThread = new TurnToFixedOrientationThread(turnDirection, m_Thymio);
-			turnThread.setName("NavThread:Turn: + " + i);
+			turnThread.setName("NavThread:Turn: " + i);
 			m_turnThreads.add(turnThread);
 			turnThread.start();
 			turnThread.join();
 			
 			// Drive Fields
 			DriveNumOfFieldsThread driveThread = new DriveNumOfFieldsThread(curNaviPoint.m_fieldsToDrive, m_Thymio);
-			driveThread.setName("NavThread:Drive: + " + i);
+			driveThread.setName("NavThread:Drive: " + i);
 			driveThread.setFieldDrivenListener(this);
 			m_driveThreads.add(driveThread);
 			driveThread.start();
 			driveThread.join();
 		}
-		m_bIsKilled = false;
+		m_bGotKilled = false;
 	}
 
 	@Override
@@ -249,11 +249,9 @@ public class PathDriveController extends Thread implements DriveNumOfFieldsThrea
 	@Override
 	public void thymioDroveField() {
 		m_iPosChanges ++;
-		
 		if (m_MapPanel == null) {
 			return;
 		}
-		
 		m_MapPanel.setNewThymioPosition(m_iPosChanges, m_calculatedPath);
 	}
 }

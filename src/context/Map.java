@@ -32,11 +32,11 @@ public class Map {
 	private double edgelength; // each element in this maps covers edgelength^2
 								// square units.
 
-	//public static final int N = 1000; // number of occupied elements
-	//public static final boolean USE_DIAGONALS = true;
+	// public static final int N = 1000; // number of occupied elements
+	// public static final boolean USE_DIAGONALS = true;
 
 	private KalmanFilter posEstimate;
-	
+
 	private Path calculatedPath;
 
 	public Map(int x, int y, double l) {
@@ -48,14 +48,15 @@ public class Map {
 
 		initMap();
 		initFilter();
-		calculatedPath = calculatePath(element[thymioX][thymioY], element[sizeX - 1][sizeY - 1]);
+		calculatedPath = calculatePath(element[thymioX][thymioY],
+				element[sizeX - 1][sizeY - 1]);
 		printMap();
 	}
 
 	public Path getCalculatedPath() {
 		return calculatedPath;
 	}
-	
+
 	private void initFilter() {
 		DenseMatrix64F F;
 		DenseMatrix64F Q;
@@ -115,7 +116,7 @@ public class Map {
 		posX += delta[0];
 		posY += delta[1];
 
-		//System.out.println("Theta: " + Math.toDegrees(thymioTheta));
+		// System.out.println("Theta: " + Math.toDegrees(thymioTheta));
 
 		// observation model
 
@@ -167,7 +168,7 @@ public class Map {
 	public double getEstimPosY() {
 		return estPosY;
 	}
-	
+
 	public double getEstimOrientation() {
 		return estTheta;
 	}
@@ -184,48 +185,56 @@ public class Map {
 		return thymioTheta;
 	}
 
+	// private class Coordinate {
+	// private int x;
+	// private int y;
+	//
+	// public Coordinate(int x, int y) {
+	// this.x = x;
+	// this.y = y;
+	// }
+	// }
+
 	private void initMap() {
 		Random r = new Random();
-		ArrayList<Integer> occupiedElements = new ArrayList<Integer>();
+		ArrayList<Coordinate> occupiedElements = new ArrayList<Coordinate>();
 
 		// initialize each element of the map
-
 		for (int x = 0; x < sizeX; x++) {
 			for (int y = 0; y < sizeY; y++) {
 				element[x][y] = new MapElement(x, y);
 			}
 		}
 
-		// collect N distinct random numbers between 0 and the max number of
-		// MapElements in this Map
+		occupiedElements.add(new Coordinate(1, 0));
+		occupiedElements.add(new Coordinate(1, 1));
+		occupiedElements.add(new Coordinate(1, 2));
+		occupiedElements.add(new Coordinate(1, 3));
+		occupiedElements.add(new Coordinate(1, 4));
+		occupiedElements.add(new Coordinate(0, 6));
+		occupiedElements.add(new Coordinate(1, 6));
+		occupiedElements.add(new Coordinate(2, 6));
+		occupiedElements.add(new Coordinate(3, 6));
+		occupiedElements.add(new Coordinate(3, 5));
 
-		while (occupiedElements.size() < Vars.NUM_BARRIERS) {
-			Integer pos = new Integer(r.nextInt(sizeX * sizeY - 1));
-			if (!occupiedElements.contains(pos) && pos != 0)
-				occupiedElements.add(pos);
+		occupiedElements.add(new Coordinate(2, 19));
+		occupiedElements.add(new Coordinate(3, 18));
+		occupiedElements.add(new Coordinate(0, 12));
+		occupiedElements.add(new Coordinate(7, 11));
+		occupiedElements.add(new Coordinate(8, 11));
+		occupiedElements.add(new Coordinate(6, 11));
+		occupiedElements.add(new Coordinate(5, 11));
+		occupiedElements.add(new Coordinate(4, 14));
+
+		occupiedElements.add(new Coordinate(0, 14));
+		occupiedElements.add(new Coordinate(6, 2));
+		occupiedElements.add(new Coordinate(4, 5));
+		occupiedElements.add(new Coordinate(5, 5));
+
+		for (Coordinate c : occupiedElements) {
+			element[c.getX()][c.getY()].setOccupied();
 		}
-		
-		occupiedElements.set(0, 3);
-		occupiedElements.set(1, 5);
-		occupiedElements.set(2, 25);
-		occupiedElements.set(3, 35);
-		occupiedElements.set(4, 56);
-		occupiedElements.set(5, 68);
-		occupiedElements.set(6, 72);
-		occupiedElements.set(7, 100);
-		occupiedElements.set(8, 123);
-		occupiedElements.set(9, 170);
 
-		// find MapElement corresponding to each of the numbers and set its
-		// state to occupied
-
-		for (int i = 0; i < Vars.NUM_BARRIERS; i++) {
-			Integer pos = occupiedElements.get(i);
-			int x = pos / sizeY; // integer division by number of columns
-			int y = pos % sizeY; // rest of integer division by number of rows
-
-			element[x][y].setOccupied();
-		}
 		setEdges();
 		// printMap();
 

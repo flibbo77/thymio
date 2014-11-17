@@ -1,20 +1,12 @@
 package observer;
 
 import java.awt.Dimension;
-import java.awt.event.KeyEvent;
-import java.awt.event.KeyListener;
-
 import javax.swing.JFrame;
 
 import thymio.Thymio;
 
-import main.MainController;
-
 
 public class ThymioInterface extends JFrame {
-	/**
-	 * 
-	 */
 	private static final long serialVersionUID = 1L;
 	public ThymioPanel myPanel;
 	

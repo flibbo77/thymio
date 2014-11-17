@@ -30,7 +30,7 @@ public class ThymioClient {
 	}
 
 	private String read() throws IOException {
-		long connectStartTime = System.currentTimeMillis();
+		System.currentTimeMillis();
 		String message = "";
 		// char[] charB = new char[20];
 		// bufferedReader.read(charB, 0, 20);
@@ -47,7 +47,7 @@ public class ThymioClient {
 	}
 
 	private void connect() throws IOException {
-		long connectStartTime = System.currentTimeMillis();
+		System.currentTimeMillis();
 
 		conn = new Socket("192.168.178.64", 6789);
 		// System.out.println("Time for new Socket:  " +

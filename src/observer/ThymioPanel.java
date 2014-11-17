@@ -15,15 +15,13 @@ import javax.swing.event.ChangeListener;
 import javax.swing.BoxLayout;
 
 import threads.DriveNumOfFieldsThread;
-import threads.TurnThread;
 import threads.TurnToFixedOrientationThread;
 import thymio.PathDriveController;
 import thymio.Thymio;
-import thymio.ThymioDrivingThread;
 
 public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 		ActionListener {
-	
+
 	private static final long serialVersionUID = 1L;
 	private Thymio myThymio;
 	private ThymioInterface myUI;
@@ -202,7 +200,7 @@ public class ThymioPanel extends JPanel implements ChangeListener, KeyListener,
 					myThymio);
 			myDriver.start();
 			break;
-		
+
 		case KeyEvent.VK_B:
 			System.out.println("\007");
 			break;
